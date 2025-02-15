@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router";
 import { CustomerHome, Login, UserRegister } from "./pages";
 import { LoginRoute, ProtectedRoute } from "./components";
+import { SchedulingList } from "./pages/SchedulingList";
 
 export const router = createBrowserRouter([
   {
@@ -25,6 +26,10 @@ export const router = createBrowserRouter([
         path: "home",
         element: <CustomerHome />
       },
+      {
+        path: "schedulings",
+        element: <SchedulingList />
+      }
     ]
   }
 ])
