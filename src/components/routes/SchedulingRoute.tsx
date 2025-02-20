@@ -3,7 +3,7 @@ import { HomeButton, PreviousPageButton } from "../buttons";
 
 export function SchedulingRoute() {
   return (
-    <div className="p-5 h-full">
+    <div className="p-7 h-full">
       <header className="flex justify-between items-center">
         <PreviousPageButton />
         <HomeButton />
