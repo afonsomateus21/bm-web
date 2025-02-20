@@ -11,3 +11,4 @@ export type * from "./profile-photo-props";
 export type * from "./text-separator-props";
 export type * from "./customer-home-option-props";
 export type * from "./photo-input-props";
+export type * from "./custom-select-props";
