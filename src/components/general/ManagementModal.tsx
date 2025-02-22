@@ -12,7 +12,9 @@ export function ManagementModal({
   subtitle, 
   imageUrl,
   isActive,
-  onToggleActive 
+  onToggleActive,
+  onEdit,
+  onDelete,
 }: ManagementModalProps) {
   const { t } = useTranslation();
   if (!isOpen) return null;
@@ -92,7 +94,7 @@ export function ManagementModal({
               />}
             title="Editar"
             format="outline"
-            onClick={() => console.log("Editar clicado")}
+            onClick={onEdit}
           />
 
           <IconButton
@@ -103,7 +105,7 @@ export function ManagementModal({
               />}
             title="Excluir"
             format="outline"
-            onClick={() => console.log("Excluir clicado")}
+            onClick={onDelete}
           />
         </div>
       </div>
