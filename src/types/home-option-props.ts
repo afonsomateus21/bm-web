@@ -1,4 +1,4 @@
-export interface CustomerHomeOptionProps {
+export interface HomeOptionProps {
   title: string;
   description: string;
   imageUrl: string;
