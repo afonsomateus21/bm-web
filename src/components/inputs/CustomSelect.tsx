@@ -1,11 +1,11 @@
 import { CustomSelectProps } from "../../types/custom-select-props";
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react'
-import { useState } from "react";
+import { forwardRef, Ref, useState } from "react";
 
-export function CustomSelect({ 
+function Select({ 
   title, errors, icon = null, options, required = false
-}: CustomSelectProps) {
+}: CustomSelectProps, ref: Ref<HTMLInputElement>) {
   const [selected, setSelected] = useState(options[0]);
 
   return (
@@ -16,7 +16,11 @@ export function CustomSelect({
       >
         {title} {required && <span className="text-red-500 text-2xl leading-none">*</span>}
       </label>
-        <Listbox value={selected} onChange={ setSelected }>
+        <Listbox 
+          value={selected} 
+          onChange={ setSelected }
+          ref={ ref }
+        >
           <div className="relative">
             <ListboxButton className="w-full h-14 bg-white border-2 border-secondary rounded-4xl px-4 flex justify-between items-center">
               {
@@ -45,4 +49,6 @@ export function CustomSelect({
     </div>
   );
 }
+
+export const CustomSelect = forwardRef(Select)
 
