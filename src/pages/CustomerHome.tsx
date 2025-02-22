@@ -1,17 +1,27 @@
+import { useNavigate } from "react-router";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../hooks";
-import { CustomerHomeOption, HelpComponent, IconButton, ProfilePhoto, TextSeparator } from "../components";
+import { CustomerHomeOption, HelpComponent, IconButton, ProfilePhoto, TextSeparator, Spinner } from "../components";
 import SchedulingImage from "../assets/scheduling-image.png";
 import ServicesImage from "../assets/services-image.png";
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
 export function CustomerHome() {
-  const { user } = useAuth();
+  const { user, logout, loading } = useAuth();
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const formattedName = user
     ? `${user.firstName ? user.firstName.split(" ")[0] : ""} ${user.lastName ? user.lastName.split(" ")[0] : ""}`.trim()
     : "";
-  const photoUrl = user?.photo ? URL.createObjectURL(user.photo) : undefined;
+
+  const photoUrl = user?.photo instanceof File
+    ? URL.createObjectURL(user.photo)
+    : user?.photo || '';
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
 
   return (
     <div className="p-9 h-full flex flex-col">
@@ -35,7 +45,7 @@ export function CustomerHome() {
           title={ t('Scheduling.Title') }
           description={ t('Scheduling.Description') }
           imageUrl={ SchedulingImage }
-          redirectTo="/services"
+          redirectTo="/schedulings"
         />
 
         <CustomerHomeOption 
@@ -48,14 +58,17 @@ export function CustomerHome() {
         <HelpComponent />
 
         <IconButton 
-          title="Sair"
-          icon={ 
-            <ExitToAppIcon 
-              htmlColor={'white'} 
-              fontSize={ 'large' }
-            /> 
-          } 
-        />
+      title="Sair"
+      onClick={handleLogout}
+      icon={ 
+        loading ? (
+          <Spinner size="large" color="white" />
+        ) : (
+          <ExitToAppIcon htmlColor="white" fontSize="large" />
+        )
+      } 
+      disabled={loading}
+    />
       </main>
     </div>
   );
