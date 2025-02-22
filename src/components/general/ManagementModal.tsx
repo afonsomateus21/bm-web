@@ -13,7 +13,7 @@ export function ManagementModal({
   imageUrl,
   isActive,
   onToggleActive 
-}: ModalProps) {
+}: ManagementModalProps) {
   const { t } = useTranslation();
   if (!isOpen) return null;
 
