@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { PhotoInputProps } from '../../types';
 import { forwardRef, Ref } from 'react';
 
-function Input({ photoUrl, ...rest } : PhotoInputProps, ref: Ref<HTMLInputElement>) {
+function Input({ photoUrl, title, ...rest } : PhotoInputProps, ref: Ref<HTMLInputElement>) {
   const { t } = useTranslation();
   
   return (
@@ -42,7 +42,7 @@ function Input({ photoUrl, ...rest } : PhotoInputProps, ref: Ref<HTMLInputElemen
       </label>
 
       <strong className="mt-5 text-tertiary">
-        { t('Common.Register.ProfilePhoto') }
+        { title ?? t('Common.Register.ProfilePhoto') }
       </strong>
     </div>
   );
