@@ -68,7 +68,10 @@
   },
   "Services": {
     "Title": "Serviços",
-    "Description": "Visualizar todos os serviços e informações",
+    "Description": {
+      "ADMIN": "Adicionar, editar, desativar ou excluir serviços",
+      "CUSTOMER": "Visualizar todos os serviços e informações"
+    },
     "SearchBar": {
       "Placeholder": "Filtre pelo nome do serviço"
     },
@@ -84,6 +87,18 @@
   },
   "Scheduling": {
     "Title": "Agendamentos",
-    "Description": "Realizar ou visualizar agendamentos"
+    "Description": "Realizar, desmarcar ou visualizar agendamentos"
+  },
+  "Professionals": {
+    "Title": "Profissionais",
+    "Description": "Adicionar, editar, desativar ou excluir profissionais",
+    "HelpText": "Clique em um(a) profissional para visualizar mais opções"
+  },
+  "Category": {
+    "LASHES": "Cílios", 
+    "NAILS": "Unhas",
+    "FOOT_HAND": "Pé & Mão",
+    "HAIR": "Cabelos",
+    "EYEBROW": "Sobrancelha"
   }
 }

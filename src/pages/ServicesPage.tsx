@@ -5,6 +5,7 @@ import { SearchBar, ProfessionalFilter, IconButton, TextSeparator, Spinner, Serv
 import AddCircleIcon from '@mui/icons-material/AddCircleOutline';
 import { useAuth } from '../hooks/useAuth';
 import { useService } from '../hooks/useService';
+import { getPhotoUrl } from "../utils";
 
 export function ServicesPage() {
   const { t } = useTranslation();
@@ -28,7 +29,7 @@ export function ServicesPage() {
   }, [user, professionals, selectedProfessionalId, setSelectedProfessionalId]);
 
   const handleNavigateToRegister = () => {
-    navigate('/register-services');
+    navigate('/create');
   };
 
   if (loading) {
@@ -106,7 +107,7 @@ export function ServicesPage() {
                 title={service?.title}
                 description={service?.description}
                 price={service?.price}
-                imageUrl={service?.photo}
+                imageUrl={getPhotoUrl(service.photo)}
                 user={user || null}
               />
             ))

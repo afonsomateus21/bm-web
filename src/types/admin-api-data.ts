@@ -1,7 +1,5 @@
-enum UserType {
-  Admin = "ADMIN",
-  Customer = "CUSTOMER"
-}
+import { CategoryEnum } from "./category-types";
+import { UserType } from "./user-types";
 
 export interface ApiAdmin {
   id: string;
@@ -12,4 +10,5 @@ export interface ApiAdmin {
   photo: string;
   type: UserType;
   google_sub: string;
+  category: CategoryEnum;
 }
