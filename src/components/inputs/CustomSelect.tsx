@@ -4,7 +4,7 @@ import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headless
 import { useState } from "react";
 
 export function CustomSelect({ 
-  title, errors, options, required = false
+  title, errors, icon = null, options, required = false
 }: CustomSelectProps) {
   const [selected, setSelected] = useState(options[0]);
 
@@ -18,13 +18,16 @@ export function CustomSelect({
       </label>
         <Listbox value={selected} onChange={ setSelected }>
           <div className="relative">
-            {/* Botão que abre o dropdown */}
-            <ListboxButton className="w-full h-12 bg-white border-2 border-secondary rounded-4xl px-4 flex justify-between items-center">
-              <span>{ selected.label }</span>
+            <ListboxButton className="w-full h-14 bg-white border-2 border-secondary rounded-4xl px-4 flex justify-between items-center">
+              {
+                icon ?? null
+              }
+              <span>
+                { selected.label }
+              </span>
               <ArrowDropDownIcon htmlColor="black" fontSize="medium" />
             </ListboxButton>
 
-            {/* Dropdown (a div que aparece ao clicar) */}
             <ListboxOptions className="absolute w-full mt-2 bg-white border border-gray-300 rounded-md shadow-lg z-10">
               {options.map((option) => (
                 <ListboxOption 
