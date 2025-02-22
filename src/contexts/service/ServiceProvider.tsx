@@ -3,6 +3,7 @@ import { api } from "../../services";
 import { CustomProviderProps, Service, ApiServiceResponse } from "../../types";
 import { ServiceContext } from "./ServiceContext";
 import { useAuth } from "../../hooks/useAuth";
+import { handleUploadImageToStorage } from "../../utils";
 
 export const ServiceProvider = ({ children }: CustomProviderProps) => {
   const { accessToken, user } = useAuth();
@@ -78,6 +79,95 @@ export const ServiceProvider = ({ children }: CustomProviderProps) => {
     setSelectedProfessionalId(professionalId);
   }, []);
 
+  const createService = useCallback(async (serviceInput: Service) => {
+    if (!accessToken) {
+      throw new Error("Usuário não autenticado.");
+    }
+
+    try {
+      setLoading(true);
+      let servicePhotoUrl: string | null = null;
+    
+      if (serviceInput.photo) {
+        try {
+          servicePhotoUrl = await handleUploadImageToStorage("services", serviceInput?.photo);
+        } catch (uploadError) {
+          console.error("Erro ao fazer upload da imagem:", uploadError);
+          throw new Error("Erro ao enviar a foto do serviço. Tente novamente.");
+        }
+      }
+
+      const service = {
+        title: serviceInput.title,
+        description: serviceInput.description,
+        category: serviceInput.category,
+        professional_id: serviceInput.professionalId,
+        duration: serviceInput.duration,
+        price: serviceInput.price,
+        photo: servicePhotoUrl,
+      };
+
+      const response = await api.post("/service", service, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      await fetchServices();
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao criar serviço:", error);
+      throw new Error("Erro ao criar serviço. Tente novamente.");
+    } finally {
+      setLoading(false);
+    }
+  }, [accessToken, fetchServices]);
+
+  const toggleServiceActive = useCallback(async (serviceId: string, newActiveStatus: boolean) => {
+    if (!accessToken) {
+      throw new Error("Usuário não autenticado.");
+    }
+  
+    try {
+      setLoading(true);
+      const response = await api.put(`/service/${serviceId}`, { active: newActiveStatus }, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+  
+      await fetchServices();
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao alternar status do serviço:", error);
+      throw new Error("Erro ao alternar status do serviço. Tente novamente.");
+    } finally {
+      setLoading(false);
+    }
+  }, [accessToken, fetchServices]);
+  
+  const deleteService = useCallback(async (serviceId: string) => {
+    if (!accessToken) {
+      throw new Error("Usuário não autenticado.");
+    }
+  
+    try {
+      setLoading(true);
+      await api.delete(`/service/${serviceId}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+  
+      await fetchServices();
+    } catch (error) {
+      console.error("Erro ao excluir serviço:", error);
+      throw new Error("Erro ao excluir serviço. Tente novamente.");
+    } finally {
+      setLoading(false);
+    }
+  }, [accessToken, fetchServices]);
+
   return (
     <ServiceContext.Provider
       value={{
@@ -90,6 +180,9 @@ export const ServiceProvider = ({ children }: CustomProviderProps) => {
         fetchServices,
         filterServices,
         setSelectedProfessionalId: handleProfessionalSelect,
+        createService,
+        toggleServiceActive,
+        deleteService,
       }}
     >
       {children}

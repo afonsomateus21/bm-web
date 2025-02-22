@@ -168,6 +168,7 @@ export const AuthProvider = ({ children }: CustomProviderProps) => {
         type: admin.type,
         googleSub: admin.google_sub,
         category: admin.category,
+        active: admin.active,
       }));
       setProfessionals(admins);
     } catch (error: unknown) {
@@ -182,6 +183,29 @@ export const AuthProvider = ({ children }: CustomProviderProps) => {
     }
   }, [accessToken]);
 
+  const toggleProfessionalActive = async (professionalId: string, newActiveStatus: boolean) => {
+    try {
+      await api.put(
+        `/auth/user/${professionalId}`, { active: newActiveStatus },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+  
+      setProfessionals((prevProfessionals) =>
+        prevProfessionals.map((prof) =>
+          prof.id === professionalId ? { ...prof, newActiveStatus } : prof
+        )
+      );
+    } catch (error) {
+      console.error("Erro ao alternar status do profissional:", error);
+      throw error;
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -195,6 +219,7 @@ export const AuthProvider = ({ children }: CustomProviderProps) => {
         logout,
         createCustomer,
         fetchProfessionals,
+        toggleProfessionalActive,
       }}
     >
       {children}
