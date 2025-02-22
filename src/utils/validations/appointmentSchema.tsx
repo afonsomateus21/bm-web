@@ -1,0 +1,14 @@
+import { TFunction } from "i18next";
+import { object, string } from "yup";
+
+export const appointmentSchema = (t: TFunction) =>
+  object({
+    professional: string()
+      .required(t("Common.Form.Errors.Professional.Required")),
+    service: string()
+      .required(t("Common.Form.Errors.Service.Required")),
+    date: string()
+      .required(t("Common.Form.Errors.Date.Required")),
+    hour: string()
+      .required(t("Common.Form.Errors.Hour.Required")),
+  })
