@@ -11,7 +11,9 @@ export function CustomerHome() {
   const formattedName = user
     ? `${user.firstName ? user.firstName.split(" ")[0] : ""} ${user.lastName ? user.lastName.split(" ")[0] : ""}`.trim()
     : "";
-  const photoUrl = user?.photo ? URL.createObjectURL(user.photo) : undefined;
+  const photoUrl = user?.photo
+    ? (user.photo instanceof Blob ? URL.createObjectURL(user.photo) : user.photo)
+    : undefined;
 
   return (
     <div className="p-9 h-full flex flex-col">
