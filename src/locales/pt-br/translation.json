@@ -21,6 +21,18 @@
         "ConfirmPassword": {
           "Required": "A confirmação de senha é obrigatória",
           "Invalid": "As senhas devem ser iguais"
+        },
+        "Professional": {
+          "Required": "É necessário escolher um profissional"
+        },
+        "Service": {
+          "Required": "É necessário escolher um serviço"
+        },
+        "Date": {
+          "Required": "É necessário escolher uma data"
+        },
+        "Hour": {
+          "Required": "É necessário escolher uma hora"
         }
       },
       "Fields": {
