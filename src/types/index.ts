@@ -19,3 +19,6 @@ export type * from "./professional-filter-props";
 export type * from "./admin-api-data";
 export type * from "./service-context-data";
 export type * from "./service-api-data";
+export type * from "./professional-card-props";
+export type * from "./category-types";
+export type * from "./user-types";
