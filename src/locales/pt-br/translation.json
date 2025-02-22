@@ -53,7 +53,8 @@
     "ProfileSubtitle": "Meu Perfil",
     "HomeQuestion": "O que você deseja?",
     "HelpMessage": "Está com alguma dúvida?",
-    "KeepInTouch": "Entre em contato."
+    "KeepInTouch": "Entre em contato.",
+    "ToggleActivation": "Ativar/desativar"
   },
   "Login": {
     "Buttons": {
@@ -83,6 +84,45 @@
     "HelpText": "Clique em um serviço para visualizar mais opções",
     "ProfessionalFilter": {
       "Label": "ou por profissional"
+    },
+    "Form": {
+      "Errors": {
+        "Title": {
+          "Required": "O título é obrigatório"
+        },
+        "Description": {
+          "Required": "A descrição é obrigatória"
+        },
+        "Category": {
+          "Required": "A categoria é obrigatória"
+        },
+        "Professional": {
+          "Required": "O(a) profissional é obrigatório"
+        },
+        "Duration": {
+          "Required": "A duração é obrigatória"
+        },
+        "Price": {
+          "Required": "O preço é obrigatório"
+        }
+      },
+      "Fields": {
+        "Title": "Título",
+        "Description": "Descrição",
+        "Category": "Categoria do Serviço",
+        "Professional": "Profissional",
+        "Duration": "Duração",
+        "Price": "Valor",
+        "Photo": "Foto"
+      },
+      "Placeholders": {
+        "Title": "Digite um título",
+        "Description": "Digite uma descrição",
+        "Category": "Selecione a categoria",
+        "Professional": "Selecione a(o) profissional",
+        "Duration": "Digite a duração",
+        "Price": "Digite o valor"
+      }
     }
   },
   "Scheduling": {
