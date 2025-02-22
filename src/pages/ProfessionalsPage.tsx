@@ -1,21 +1,50 @@
+import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useTranslation } from 'react-i18next';
-import { IconButton, Spinner, ProfessionalCard } from '../components';
+import { IconButton, Spinner, ProfessionalCard, ManagementModal } from '../components';
 import AddCircleIcon from '@mui/icons-material/AddCircleOutline';
 import { useAuth } from '../hooks/useAuth';
-import { formatName } from "../utils";
+import { formatName, getPhotoUrl } from "../utils";
+import { Professional } from "../types";
 
 export function ProfessionalsPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { loading, professionals, user } = useAuth();
-  
-  const hasProfessional = professionals?.length;
+  const { loading, professionals, user, toggleProfessionalActive  } = useAuth();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedProfessional, setSelectedProfessional] = useState<Professional | null>(null);
 
-  console.log('profissionais: ', professionals);
+  const hasProfessional = professionals?.length;
 
   const handleNavigateToRegister = () => {
     navigate('/create');
+  };
+
+  const handleProfessionalClick = (professional: Professional) => {
+    setSelectedProfessional(professional);
+    setIsModalOpen(true);
+  };
+
+  const handleToggleActive = async () => {
+    if (selectedProfessional) {
+      const newActiveStatus = !selectedProfessional.active;
+      await toggleProfessionalActive(selectedProfessional.id, newActiveStatus);
+      setSelectedProfessional((prev) => {
+        if (prev) {
+          return {
+            ...prev,
+            active: newActiveStatus,
+          };
+        }
+        return prev;
+      });
+    }
+  };
+
+  const handleDelete = async () => {
+    if (selectedProfessional) {
+      setIsModalOpen(false);
+    }
   };
 
   if (loading) {
@@ -71,6 +100,8 @@ export function ProfessionalsPage() {
                 name={formatName(professional)}
                 category={professional?.category}
                 imageUrl={String(professional?.photo)}
+                professional={professional}
+                onProfessionalClick={() => handleProfessionalClick(professional)}
               />
             ))
           ) : (
@@ -80,6 +111,23 @@ export function ProfessionalsPage() {
           )}
         </div>
       </div>
+
+      <ManagementModal
+        isOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+          setSelectedProfessional(null);
+        }}
+        title={selectedProfessional ? formatName(selectedProfessional) : ''}
+        subtitle={t(`Category.${selectedProfessional?.category}`)}
+        imageUrl={getPhotoUrl(selectedProfessional?.photo)}
+        isActive={selectedProfessional?.active || false}
+        onToggleActive={handleToggleActive}
+        onEdit={() => {
+          navigate(`/edit-professional/${selectedProfessional?.id}`);
+        }}
+        onDelete={handleDelete}
+      />
     </div>
   );
 }

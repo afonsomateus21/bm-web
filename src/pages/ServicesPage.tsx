@@ -1,13 +1,16 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { useTranslation } from 'react-i18next';
-import { SearchBar, ProfessionalFilter, IconButton, TextSeparator, Spinner, ServiceCard } from '../components';
+import { SearchBar, ProfessionalFilter, IconButton, TextSeparator, Spinner, ServiceCard, ManagementModal } from '../components';
 import AddCircleIcon from '@mui/icons-material/AddCircleOutline';
 import { useAuth } from '../hooks/useAuth';
 import { useService } from '../hooks/useService';
 import { getPhotoUrl } from "../utils";
+import { Service } from "../types";
 
 export function ServicesPage() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedService, setSelectedService] = useState<Service | null>(null);
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { professionals, user } = useAuth();
@@ -17,6 +20,8 @@ export function ServicesPage() {
     filterServices,
     selectedProfessionalId,
     setSelectedProfessionalId,
+    toggleServiceActive,
+    deleteService,
   } = useService();
   
   const hasServices = filteredServices?.length;
@@ -30,6 +35,29 @@ export function ServicesPage() {
 
   const handleNavigateToRegister = () => {
     navigate('/create');
+  };
+
+  const handleServiceClick = (service: Service) => {
+    setSelectedService(service);
+    setIsModalOpen(true);
+  };
+
+  const handleToggleActive = async () => {
+    if (selectedService) {
+      const newActiveStatus = !selectedService.active;
+      await toggleServiceActive(selectedService.id, newActiveStatus);
+      setSelectedService((prevService) => ({
+        ...prevService,
+        active: newActiveStatus,
+      }));
+    }
+  };
+
+  const handleDelete = async () => {
+    if (selectedService) {
+      await deleteService(selectedService.id);
+      setIsModalOpen(false);
+    }
   };
 
   if (loading) {
@@ -101,7 +129,7 @@ export function ServicesPage() {
       <div className="flex-1 overflow-hidden px-6">
         <div className="h-full overflow-y-auto">
           {hasServices ? (
-            filteredServices.map((service) => (
+            filteredServices.map((service: Service) => (
               <ServiceCard
                 key={service?.id}
                 title={service?.title}
@@ -109,6 +137,8 @@ export function ServicesPage() {
                 price={service?.price}
                 imageUrl={getPhotoUrl(service.photo)}
                 user={user || null}
+                service={service}
+                onServiceClick={handleServiceClick}
               />
             ))
           ) : (
@@ -118,6 +148,23 @@ export function ServicesPage() {
           )}
         </div>
       </div>
+
+      <ManagementModal
+        isOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+          setSelectedService(null);
+        }}
+        title={selectedService?.title || ''}
+        subtitle={selectedService?.description || ''}
+        imageUrl={getPhotoUrl(selectedService?.photo)}
+        isActive={selectedService?.active || false}
+        onToggleActive={handleToggleActive}
+        onEdit={() => {
+          navigate(`/edit/${selectedService?.id}`);
+        }}
+        onDelete={handleDelete}
+      />
     </div>
   );
 }
