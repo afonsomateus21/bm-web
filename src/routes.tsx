@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router";
-import { CustomerHome, Login, UserRegister } from "./pages";
+import { CreateOrEditAppointment, CustomerHome, Login, UserRegister } from "./pages";
 import { LoginRoute, ProtectedRoute, SchedulingRoute } from "./components";
 import { SchedulingList } from "./pages/SchedulingList";
 
@@ -27,12 +27,16 @@ export const router = createBrowserRouter([
         element: <CustomerHome />
       },
       {
-        path: "schedulings",
+        path: "appointments",
         element: <SchedulingRoute />,
         children: [
           {
             path: "",
             element: <SchedulingList />
+          },
+          {
+            path: "create",
+            element: <CreateOrEditAppointment />
           }
         ]
       }
