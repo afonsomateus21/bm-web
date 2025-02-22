@@ -1,6 +1,6 @@
 import { Service } from './service'
 
-export interface ServiceContextData {
+export interface ServiceContextType {
   services: Service[];
   filteredServices: Service[];
   loading: boolean;
@@ -9,5 +9,8 @@ export interface ServiceContextData {
   selectedProfessionalId: string | null;
   fetchServices: () => Promise<void>;
   filterServices: (term: string) => void;
-  setSelectedProfessionalId: (id: string | null) => void;
+  setSelectedProfessionalId: (professionalId: string | null) => void;
+  createService: (serviceInput: Service) => Promise<void>;
+  toggleServiceActive: (serviceId: string) => Promise<void>; // Nova função
+  deleteService: (serviceId: string) => Promise<void>; // Nova função
 }

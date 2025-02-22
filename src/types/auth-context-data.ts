@@ -13,4 +13,5 @@ export interface AuthContextData {
   logout: () => void;
   refreshAccessToken: () => Promise<void>;
   fetchProfessionals: () => Promise<void>;
+  toggleProfessionalActive: (professionalId: string, active: boolean) => Promise<void>;
 }

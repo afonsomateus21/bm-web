@@ -22,3 +22,5 @@ export type * from "./service-api-data";
 export type * from "./professional-card-props";
 export type * from "./category-types";
 export type * from "./user-types";
+export type * from "./management-modal-props";
+export type * from "./toggle-switch-props";
