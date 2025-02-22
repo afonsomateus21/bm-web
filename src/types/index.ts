@@ -13,3 +13,4 @@ export type * from "./customer-home-option-props";
 export type * from "./photo-input-props";
 export type * from "./custom-select-props";
 export type * from "./footer-props";
+export type * from "./date-input-props";
