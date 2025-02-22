@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { api } from "../../services";
-import { CustomProviderProps, LoginInput, User, ApiAdmin } from "../../types";
+import { CustomProviderProps, LoginInput, User, ApiAdmin, Professional } from "../../types";
 import { AuthContext } from "./AuthContext";
 import { handleUploadImageToStorage, isTokenExpired } from "../../utils";
 
@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }: CustomProviderProps) => {
     () => localStorage.getItem("refresh_token")
   );
   const [user, setUser] = useState<User | null>();
-  const [professionals, setProfessionals] = useState<User[]>([]);
+  const [professionals, setProfessionals] = useState<Professional[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -158,7 +158,7 @@ export const AuthProvider = ({ children }: CustomProviderProps) => {
       });
 
       const data = response.data;
-      const admins: User[] = data.map((admin: ApiAdmin) => ({
+      const admins: Professional[] = data.map((admin: ApiAdmin) => ({
         id: admin.id,
         firstName: admin.first_name,
         lastName: admin.last_name,
@@ -167,6 +167,8 @@ export const AuthProvider = ({ children }: CustomProviderProps) => {
         photo: admin.photo,
         type: admin.type,
         googleSub: admin.google_sub,
+        category: admin.category,
+        active: admin.active,
       }));
       setProfessionals(admins);
     } catch (error: unknown) {
@@ -181,6 +183,29 @@ export const AuthProvider = ({ children }: CustomProviderProps) => {
     }
   }, [accessToken]);
 
+  const toggleProfessionalActive = async (professionalId: string, newActiveStatus: boolean) => {
+    try {
+      await api.put(
+        `/auth/user/${professionalId}`, { active: newActiveStatus },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+  
+      setProfessionals((prevProfessionals) =>
+        prevProfessionals.map((prof) =>
+          prof.id === professionalId ? { ...prof, newActiveStatus } : prof
+        )
+      );
+    } catch (error) {
+      console.error("Erro ao alternar status do profissional:", error);
+      throw error;
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -194,6 +219,7 @@ export const AuthProvider = ({ children }: CustomProviderProps) => {
         logout,
         createCustomer,
         fetchProfessionals,
+        toggleProfessionalActive,
       }}
     >
       {children}

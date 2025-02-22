@@ -7,4 +7,5 @@ export interface ApiServiceResponse {
   duration?: number;
   price?: number;
   photo?: string;
+  active?: boolean;
 }

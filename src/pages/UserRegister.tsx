@@ -76,7 +76,7 @@ export function UserRegister() {
     <main className="h-screen flex flex-col justify-evenly overflow-hidden px-5">
       <button 
         onClick={() => navigate(-1)}
-        className="underline text-md ml-6 self-start"
+        className="underline text-md ml-2 self-start"
       >
         { t('Common.Buttons.Back') }
       </button>

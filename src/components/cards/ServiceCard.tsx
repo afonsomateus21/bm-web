@@ -2,13 +2,24 @@ import { ServiceCardProps } from "../../types";
 import { useTranslation } from "react-i18next";
 import { formatPrice } from "../../utils/formats";
 
-export function ServiceCard({ title, description, price, imageUrl, user }: ServiceCardProps) {
+export function ServiceCard({ title, description, price, imageUrl, user, service, onServiceClick }: ServiceCardProps) {
   const { t } = useTranslation();
   const safeImageUrl = imageUrl || "../../assets/no_image.png"; 
   const safePrice = price !== undefined && price !== null ? formatPrice(price) : t("Services.Card.PriceUnavailable");
 
+  const handleClick = () => {
+    if (user?.type === "ADMIN") {
+      onServiceClick(service);
+    }
+  };
+
   return (
-    <div className="w-full rounded-2xl border border-secondary overflow-hidden shadow-lg p-4 bg-white relative mb-8">
+    <div 
+      className={`w-full rounded-2xl border border-secondary overflow-hidden shadow-lg p-4 bg-white relative mb-8 ${
+        user?.type === "ADMIN" ? "cursor-pointer" : ""
+      }`}
+      onClick={handleClick}
+    >
       <div className="flex items-center space-x-4">
         <div className="w-28 h-28 flex-shrink-0 overflow-hidden rounded-xl shadow-md">
           <img

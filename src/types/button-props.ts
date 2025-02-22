@@ -4,4 +4,5 @@ export interface ButtonProps extends
 DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>, AriaAttributes  {
 	title?: string;
 	icon?: ReactNode | string;
+	format?: string;
 }

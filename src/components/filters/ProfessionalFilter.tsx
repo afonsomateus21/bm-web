@@ -1,4 +1,5 @@
 import { ProfessionalFilterProps } from '../../types';
+import { getPhotoUrl } from '../../utils';
 
 export function ProfessionalFilter({ professionals, onSelect, selectedId }: ProfessionalFilterProps) {
   const handleSelect = (id: string) => {
@@ -8,10 +9,7 @@ export function ProfessionalFilter({ professionals, onSelect, selectedId }: Prof
   const validProfessionals = professionals
     .filter((professional) => professional.id)
     .map((professional) => {
-      const photoUrl =
-        professional.photo instanceof File
-          ? URL.createObjectURL(professional.photo)
-          : professional.photo || '';
+      const photoUrl = getPhotoUrl(professional.photo);
 
       return {
         ...professional,

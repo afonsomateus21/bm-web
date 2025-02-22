@@ -1,7 +1,7 @@
-import { User } from './user';
+import { Professional } from './professional';
 
 export interface ProfessionalFilterProps {
-  professionals: User[];
+  professionals: Professional[];
   onSelect: (professionalId: string | null) => void;
   selectedId?: string | null;
 }
