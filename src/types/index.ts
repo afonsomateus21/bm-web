@@ -12,3 +12,4 @@ export type * from "./text-separator-props";
 export type * from "./customer-home-option-props";
 export type * from "./photo-input-props";
 export type * from "./custom-select-props";
+export type * from "./footer-props";
