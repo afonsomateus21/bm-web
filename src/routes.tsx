@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router";
-import { CustomerHome, Login, UserRegister, ServicesPage } from "./pages";
+import { HomePage, Login, UserRegister, ServicesPage } from "./pages";
 import { LoginRoute, ProtectedRoute } from "./components";
 
 export const router = createBrowserRouter([
@@ -23,7 +23,7 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "home",
-        element: <CustomerHome />
+        element: <HomePage />
       },
       {
         path: "services/",
