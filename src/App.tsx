@@ -1,7 +1,7 @@
 import { RouterProvider } from 'react-router';
 import './index.css'
 import { router } from './routes';
-import { AuthProvider, PasswordProvider } from './contexts';
+import { AuthProvider, PasswordProvider, ServiceProvider } from './contexts';
 import './i18n.ts';
 
 function App() {
@@ -9,11 +9,13 @@ function App() {
     <div className='bg-primary h-screen'>
       <AuthProvider>
         <PasswordProvider>
-          <RouterProvider router={ router } />
+          <ServiceProvider>
+            <RouterProvider router={ router } />
+          </ServiceProvider>
         </PasswordProvider>
       </AuthProvider>
     </div>
   );
 }
 
-export default App
+export default App;
