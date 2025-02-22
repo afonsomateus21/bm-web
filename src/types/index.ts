@@ -9,7 +9,7 @@ export type * from "./auth-context-data";
 export type * from "./user";
 export type * from "./profile-photo-props";
 export type * from "./text-separator-props";
-export type * from "./customer-home-option-props";
+export type * from "./home-option-props";
 export type * from "./photo-input-props";
 export type * from "./service-card-props";
 export type * from "./search-bar-props";

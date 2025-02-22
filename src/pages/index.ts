@@ -1,4 +1,4 @@
 export { Login } from "./Login";
 export { UserRegister } from "./UserRegister";
-export { CustomerHome } from "./CustomerHome";
+export { HomePage } from "./HomePage";
 export { ServicesPage } from "./ServicesPage";
