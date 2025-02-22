@@ -1,19 +1,19 @@
 import { useEffect, useState } from "react";
 import { api } from "../../services";
-import { CustomProviderProps, LoginInput, User } from "../../types";
+import { CustomProviderProps, LoginInput, User, ApiAdmin } from "../../types";
 import { AuthContext } from "./AuthContext";
 import { handleUploadImageToStorage, isTokenExpired } from "../../utils";
 
-
 export const AuthProvider = ({ children }: CustomProviderProps) => {
-  const [ accessToken, setAccessToken ] = useState<string | null>(
+  const [accessToken, setAccessToken] = useState<string | null>(
     () => localStorage.getItem("access_token")
   );
-  const [ refreshToken, setRefreshToken ] = useState<string | null>(
+  const [refreshToken, setRefreshToken] = useState<string | null>(
     () => localStorage.getItem("refresh_token")
   );
-  const [ user, setUser ] = useState<User | null>();
-  const [ loading, setLoading ] = useState<boolean>(true);
+  const [user, setUser] = useState<User | null>();
+  const [professionals, setProfessionals] = useState<User[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }: CustomProviderProps) => {
       }
       await getCurrentUser();
     };
-  
+
     fetchUser();
   }, [accessToken]);
 
@@ -37,12 +37,26 @@ export const AuthProvider = ({ children }: CustomProviderProps) => {
   }
 
   async function logout() {
-    setAccessToken(null);
-    setRefreshToken(null);
-
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("refresh_token");
-  }
+    setLoading(true);
+  
+    try {
+      await api.post("/auth/logout", {}, { 
+        headers: { Authorization: `Bearer ${accessToken}` }
+      }).catch(() => {});
+  
+    } catch (error) {
+      console.error("Erro ao fazer logout:", error);
+    } finally {
+      setAccessToken(null);
+      setRefreshToken(null);
+      setUser(null);
+      
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("refresh_token");
+  
+      setLoading(false); 
+    }
+  }  
 
   async function refreshAccessToken() {
     try {
@@ -109,7 +123,7 @@ export const AuthProvider = ({ children }: CustomProviderProps) => {
     
       if (userInput.photo) {
         try {
-          profilePhotoUrl = await handleUploadImageToStorage(userInput.photo);
+          profilePhotoUrl = await handleUploadImageToStorage("users", userInput.photo);
         } catch (uploadError) {
           console.error("Erro ao fazer upload da imagem:", uploadError);
           throw new Error("Erro ao enviar a foto de perfil. Tente novamente.");
@@ -134,9 +148,55 @@ export const AuthProvider = ({ children }: CustomProviderProps) => {
     }
   }
 
+  const fetchProfessionals = async () => {
+    try {
+      const response = await api.get("/auth/user/admin", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      const data = response.data;
+      const admins: User[] = data.map((admin: ApiAdmin) => ({
+        id: admin.id,
+        firstName: admin.first_name,
+        lastName: admin.last_name,
+        email: admin.email,
+        phone: admin.phone,
+        photo: admin.photo,
+        type: admin.type,
+        googleSub: admin.google_sub,
+      }));
+      setProfessionals(admins);
+    } catch (error: unknown) {
+      console.error("Erro ao buscar profissionais:", error);
+    }
+  };
+
+
+  useEffect(() => {
+    if (accessToken) {
+      fetchProfessionals();
+    }
+  }, [accessToken]);
+
   return (
-    <AuthContext.Provider value={{ accessToken, refreshToken, user, loading, refreshAccessToken, login, logout, createCustomer }}>
-      { children }
+    <AuthContext.Provider
+      value={{
+        accessToken,
+        refreshToken,
+        user,
+        professionals,
+        loading,
+        refreshAccessToken,
+        login,
+        logout,
+        createCustomer,
+        fetchProfessionals,
+      }}
+    >
+      {children}
     </AuthContext.Provider>
   )
 }
