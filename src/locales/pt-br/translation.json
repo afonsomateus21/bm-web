@@ -29,7 +29,10 @@
         "Email": "Email",
         "Phone": "Telefone",
         "Password": "Senha",
-        "PasswordConfirmation": "Confirmar Senha"
+        "PasswordConfirmation": "Confirmar Senha",
+        "Professional": "Profissional",
+        "Service": "Serviço",
+        "Notification": "Desejo receber notificações e alertas"
       },
       "Placeholders": {
         "FirstName": "Digite seu nome",
@@ -71,6 +74,10 @@
   },
   "Scheduling": {
     "Title": "Agendamentos",
-    "Description": "Realizar ou visualizar agendamentos"
+    "Description": "Realizar ou visualizar agendamentos",
+    "Create": "Agendar",
+    "Edit": "Editar Agendamento",
+    "SelectDateFirst": "Selecione primeiro a data",
+    "CancelPolicyText": "Leia nossa política de cancelamento."
   }
 }
