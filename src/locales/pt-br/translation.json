@@ -46,7 +46,8 @@
     },
     "Buttons": {
       "Back": "Voltar",
-      "Register": "Cadastrar"
+      "Register": "Cadastrar",
+      "Add": "Adicionar"
     },
     "WelcomeMessage": "Seja bem-vinda,",
     "ProfileSubtitle": "Meu Perfil",
@@ -67,7 +68,19 @@
   },
   "Services": {
     "Title": "Serviços",
-    "Description": "Visualizar todos os serviços e informações"
+    "Description": "Visualizar todos os serviços e informações",
+    "SearchBar": {
+      "Placeholder": "Filtre pelo nome do serviço"
+    },
+    "Card": {
+      "Button": "Quero agendar",
+      "PriceUnavailable": "Não informado"
+    },
+    "NoServicesFound": "Nenhum serviço encontrado... :(",
+    "HelpText": "Clique em um serviço para visualizar mais opções",
+    "ProfessionalFilter": {
+      "Label": "ou por profissional"
+    }
   },
   "Scheduling": {
     "Title": "Agendamentos",
