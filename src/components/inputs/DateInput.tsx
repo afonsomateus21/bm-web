@@ -1,15 +1,13 @@
-import { Ref, forwardRef, useState } from "react";
-import { InputProps } from "../../types";
+import { DateInputProps } from "../../types";
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
+import { useTranslation } from "react-i18next";
 
-function Input({ 
-  title, icon = null, errors, required = false, ...rest 
-}: InputProps, ref: Ref<HTMLInputElement>) {
-
-  const [startDate, setStartDate] = useState<Date | null>();
-
+export function DateInput({ 
+  title, icon = null, errors, required = false, dateValue, onChangeDate, ...rest 
+}: DateInputProps) {
+  const { t } = useTranslation();
 
   return (
     <div className="w-full max-w-sm flex flex-col">
@@ -25,9 +23,11 @@ function Input({
         </span>
         <DatePicker 
           toggleCalendarOnIconClick
-          selected={ startDate }
-          onChange={(date) => setStartDate(date)}
+          selected={ dateValue }
+          onChange={ onChangeDate }
           {...rest}
+          placeholderText={t('Common.Form.Placeholders.Date')}
+          dateFormat="dd/MM/yyyy"
           className="w-full text-center outline-none border-none p-4 text-xl placeholder:font-bold placeholder:opacity-40 hide-calendar-icon" 
         />
       </div>
@@ -36,6 +36,3 @@ function Input({
     </div>
   );
 }
-
-export const DateInput = forwardRef(Input);
-
