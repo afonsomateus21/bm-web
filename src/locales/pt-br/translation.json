@@ -52,7 +52,8 @@
         "Email": "Digite seu email",
         "Phone": "Digite seu telefone",
         "Password": "Digite sua senha",
-        "PasswordConfirmation": "Confirme sua senha"
+        "PasswordConfirmation": "Confirme sua senha",
+        "Date": "Selecione uma data"
       }
     },
     "Register": {
