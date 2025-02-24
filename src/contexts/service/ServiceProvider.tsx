@@ -98,6 +98,7 @@ export const ServiceProvider = ({ children }: CustomProviderProps) => {
       }
 
       const service = {
+        active: true,
         title: serviceInput.title,
         description: serviceInput.description,
         category: serviceInput.category,
@@ -168,6 +169,78 @@ export const ServiceProvider = ({ children }: CustomProviderProps) => {
     }
   }, [accessToken, fetchServices]);
 
+  const getServiceById = useCallback(async (serviceId: string): Promise<Service | null> => {
+    if (!accessToken) {
+      throw new Error("Usuário não autenticado.");
+    }
+
+    try {
+      setLoading(true);
+      const response = await api.get(`/service/${serviceId}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      const serviceData: Service = {
+        ...response.data,
+        professionalId: response.data.professional_id,
+      };
+
+      return serviceData;
+    } catch (error) {
+      console.error("Erro ao buscar serviço:", error);
+      throw new Error("Erro ao buscar serviço. Tente novamente.");
+    } finally {
+      setLoading(false);
+    }
+  }, [accessToken]);
+
+  const updateService = useCallback(async (serviceId: string, serviceInput: Service) => {
+    if (!accessToken) {
+      throw new Error("Usuário não autenticado.");
+    }
+
+    try {
+      setLoading(true);
+      let servicePhotoUrl: string | null = null;
+
+      if (serviceInput.photo) {
+        try {
+          servicePhotoUrl = await handleUploadImageToStorage("services", serviceInput.photo);
+        } catch (uploadError) {
+          console.error("Erro ao fazer upload da imagem:", uploadError);
+          throw new Error("Erro ao enviar a foto do serviço. Tente novamente.");
+        }
+      }
+
+      const servicePayload = {
+        id: serviceId,
+        title: serviceInput.title,
+        description: serviceInput.description,
+        category: serviceInput.category,
+        professional_id: serviceInput.professionalId,
+        duration: Number(serviceInput.duration),
+        price: Number(serviceInput.price),
+        photo: servicePhotoUrl || serviceInput.photo,
+      };
+
+      const response = await api.put(`/service/${serviceId}`, servicePayload, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      await fetchServices();
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao atualizar serviço:", error);
+      throw new Error("Erro ao atualizar serviço. Tente novamente.");
+    } finally {
+      setLoading(false);
+    }
+  }, [accessToken, fetchServices]);
+
   return (
     <ServiceContext.Provider
       value={{
@@ -183,6 +256,8 @@ export const ServiceProvider = ({ children }: CustomProviderProps) => {
         createService,
         toggleServiceActive,
         deleteService,
+        getServiceById,
+        updateService,
       }}
     >
       {children}

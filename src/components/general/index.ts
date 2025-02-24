@@ -6,3 +6,4 @@ export { TextSeparator } from "./TextSeparator";
 export { HelpComponent } from "./HelpComponent";
 export { ManagementModal } from "./ManagementModal";
 export { ToggleSwitch } from "./ToggleSwitch";
+export { HeaderNavigation } from "./HeaderNavigation";

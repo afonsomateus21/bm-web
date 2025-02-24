@@ -47,7 +47,8 @@
     "Buttons": {
       "Back": "Voltar",
       "Register": "Cadastrar",
-      "Add": "Adicionar"
+      "Add": "Adicionar",
+      "Save": "Salvar"
     },
     "WelcomeMessage": "Seja bem-vinda,",
     "ProfileSubtitle": "Meu Perfil",
@@ -86,6 +87,8 @@
       "Label": "ou por profissional"
     },
     "Form": {
+      "CreateTitle": "Cadastrar Serviço",
+      "EditTitle": "Editar Serviço",
       "Errors": {
         "Title": {
           "Required": "O título é obrigatório"

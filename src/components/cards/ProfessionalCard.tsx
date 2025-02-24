@@ -1,9 +1,9 @@
 import { ProfessionalCardProps } from "../../types";
 import { useTranslation } from 'react-i18next';
 
-export function ProfessionalCard({ name, category, imageUrl, professional, onProfessionalClick }: ProfessionalCardProps) {
+export function ProfessionalCard({ name, category, imageUrl, professional, active, user, onProfessionalClick }: ProfessionalCardProps) {
   const { t } = useTranslation();
-  const safeImageUrl = imageUrl || "../../assets/no_image.png"; 
+  const safeImageUrl = imageUrl || "../../assets/no_image.png";
 
   const handleClick = () => {
     onProfessionalClick(professional);
@@ -27,6 +27,13 @@ export function ProfessionalCard({ name, category, imageUrl, professional, onPro
           <p className="text-tertiary text-sm font-medium line-clamp-1 overflow-hidden">
             {t(`Category.${category}`)}
           </p>
+          {user?.type === "ADMIN" && (
+              <p
+                className="rounded-lg bg-tertiary text-white text-sm mt-2 px-5 py-1 font-bold w-20"
+              >
+                {active ? "Ativo" : "Inativo"}
+              </p>
+            )}
         </div>
       </div>
     </div>
