@@ -70,8 +70,6 @@ export const AppointmentProvider = ({ children }: CustomProviderProps) => {
       }
     );
 
-    console.log(response);
-
     const services = response.data ? response.data : [];
 
     return services.map(({ id, title }: { id: string; title: string; }) => ({
@@ -80,8 +78,35 @@ export const AppointmentProvider = ({ children }: CustomProviderProps) => {
     }));
   }
 
+  async function getAvailableHoursByProfessionalAndDate(professionalId: string, date: string) {
+    const response = await api.get(
+      "/appointments/date-professional",
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${accessToken}`
+        },
+        params: {
+          "professional_id": professionalId,
+          "appointment_date": date
+        }
+      }
+    );
+
+    const availableHoursObject: { hours: number[] } = response.data ? response.data : [];
+
+    return availableHoursObject.hours;
+  }
+
   return (
-    <AppointmentContext.Provider value={{ appointment, professionals, createAppointment, getServicesByProfessional }}>
+    <AppointmentContext.Provider 
+      value={{ 
+        appointment, 
+        professionals, 
+        createAppointment, 
+        getServicesByProfessional,
+        getAvailableHoursByProfessionalAndDate
+      }}>
       { children }
     </AppointmentContext.Provider>
   )
