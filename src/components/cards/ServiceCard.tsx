@@ -1,12 +1,14 @@
 import { ServiceCardProps } from "../../types";
 import { useTranslation } from "react-i18next";
 import { formatPrice } from "../../utils/formats";
+import { useNavigate } from "react-router";
 
 export function ServiceCard({ title, description, price, imageUrl, user, service, onServiceClick }: ServiceCardProps) {
   const { t } = useTranslation();
   const safeImageUrl = imageUrl || "../../assets/no_image.png"; 
   const safePrice = price !== undefined && price !== null ? formatPrice(price) : t("Services.Card.PriceUnavailable");
   const isActive = service?.active;
+  const navigate = useNavigate();
 
   const handleClick = () => {
     if (user?.type === "ADMIN") {
@@ -50,7 +52,7 @@ export function ServiceCard({ title, description, price, imageUrl, user, service
 
       {user?.type === "CUSTOMER" && (
         <div className="absolute right-0 bottom-0">
-          <button className="bg-tertiary rounded-xl text-white text-sm px-5 py-2 font-bold w-28">
+          <button className="bg-tertiary rounded-xl text-white text-sm px-5 py-2 font-bold w-28" onClick={() => navigate("/appointments/create")}>
             {t("Services.Card.Button")}
           </button>
         </div>
