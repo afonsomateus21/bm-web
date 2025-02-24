@@ -91,6 +91,10 @@
     "Create": "Agendar",
     "Edit": "Editar Agendamento",
     "SelectDateFirst": "Selecione primeiro a data",
-    "CancelPolicyText": "Leia nossa política de cancelamento."
+    "CancelPolicyText": "Leia nossa política de cancelamento.",
+    "NotFound": "Nenhum agendamento encontrado",
+    "Button": {
+      "NewScheduling": "Novo Agendamento"
+    }
   }
 }
