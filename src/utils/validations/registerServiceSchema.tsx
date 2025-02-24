@@ -1,7 +1,6 @@
 import { TFunction } from "i18next";
 import { object, string, number } from "yup";
 
-
 export const registerServiceSchema = (t: TFunction) =>
   object({
     title: string()
@@ -16,4 +15,4 @@ export const registerServiceSchema = (t: TFunction) =>
       .required(t('Services.Form.Errors.Price.Required')),
     duration: number()
       .required(t('Services.Form.Errors.Duration.Required'))
-  })
+  });
