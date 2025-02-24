@@ -9,7 +9,7 @@ export function ProfessionalFilter({ professionals, onSelect, selectedId }: Prof
   const validProfessionals = professionals
     .filter((professional) => professional.id)
     .map((professional) => {
-      const photoUrl = getPhotoUrl(professional.photo);
+      const photoUrl = getPhotoUrl(professional.profilePhoto);
 
       return {
         ...professional,
