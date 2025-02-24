@@ -18,3 +18,5 @@ export type * from "./appointment-form-input";
 export type * from "./appointment";
 export type * from "./appointment-context-data";
 export type * from "./update-appointment";
+export type * from "./service-scheduled-props";
+export type * from "./search-by-date-input";
