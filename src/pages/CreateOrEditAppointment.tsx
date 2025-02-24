@@ -17,8 +17,13 @@ export function CreateOrEditAppointment() {
     register, 
     handleSubmit, 
     watch,
-    formState: { errors } 
-  } = useForm<AppointmentFormInput>({ resolver: yupResolver(appointmentSchema(t)) });
+    formState: { errors }
+  } = useForm<AppointmentFormInput>({ 
+    resolver: yupResolver(appointmentSchema(t)),
+    defaultValues: {
+      isNotifiable: true
+    }
+  });
   const { professionals, createAppointment, getServicesByProfessional, getAvailableHoursByProfessionalAndDate } = useAppointment();
   const selectedProfessional = watch("professional");
   const selectedDate = watch("date");
