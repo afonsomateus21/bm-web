@@ -6,6 +6,7 @@ export function ServiceCard({ title, description, price, imageUrl, user, service
   const { t } = useTranslation();
   const safeImageUrl = imageUrl || "../../assets/no_image.png"; 
   const safePrice = price !== undefined && price !== null ? formatPrice(price) : t("Services.Card.PriceUnavailable");
+  const isActive = service?.active;
 
   const handleClick = () => {
     if (user?.type === "ADMIN") {
@@ -32,6 +33,18 @@ export function ServiceCard({ title, description, price, imageUrl, user, service
           <div className="font-bold text-tertiary text-xl truncate">{title}</div>
           <p className="text-tertiary text-sm font-medium line-clamp-1 overflow-hidden">{description}</p>
           <p className="text-tertiary font-extrabold text-lg mt-2">{safePrice}</p>
+          <div className="flex gap-2 mt-2">
+            <p className="bg-secondary rounded-lg text-white text-sm px-5 py-1 font-bold w-20">
+              {t(`Category.${service.category}`)}
+            </p>
+            {user?.type === "ADMIN" && (
+              <p
+                className="rounded-lg bg-tertiary text-white text-sm px-5 py-1 font-bold w-20"
+              >
+                {isActive ? "Ativo" : "Inativo"}
+              </p>
+            )}
+          </div>
         </div>
       </div>
 
