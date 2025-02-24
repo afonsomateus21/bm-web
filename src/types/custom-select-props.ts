@@ -6,5 +6,6 @@ export interface CustomSelectProps {
   errors?: string | undefined;
   value: string;
   required?: boolean;
+  disabled?: boolean;
   onChange: (value: string) => void;
 }
