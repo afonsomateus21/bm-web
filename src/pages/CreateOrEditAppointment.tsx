@@ -142,7 +142,7 @@ export function CreateOrEditAppointment() {
           render={({ field }) => (
             <CustomSelect 
               title="Hora"
-              disabled={ !selectedDate }
+              disabled={ !selectedDate || !selectedProfessional }
               icon={  
                 <AccessTimeIcon 
                   htmlColor="black"
