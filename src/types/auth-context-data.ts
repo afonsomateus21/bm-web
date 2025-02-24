@@ -14,4 +14,6 @@ export interface AuthContextData {
   refreshAccessToken: () => Promise<void>;
   fetchProfessionals: () => Promise<void>;
   toggleProfessionalActive: (professionalId: string, active: boolean) => Promise<void>;
+  deleteProfessional: (professionalId: string) => Promise<void>;
+  createProfessional: (professionalInput: Professional) => Promise<Professional | undefined>;
 }

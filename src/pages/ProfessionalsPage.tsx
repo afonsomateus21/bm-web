@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useTranslation } from 'react-i18next';
-import { IconButton, Spinner, ProfessionalCard, ManagementModal } from '../components';
+import { IconButton, Spinner, ProfessionalCard, ManagementModal, HeaderNavigation } from '../components';
 import AddCircleIcon from '@mui/icons-material/AddCircleOutline';
 import { useAuth } from '../hooks/useAuth';
 import { formatName, getPhotoUrl } from "../utils";
@@ -10,7 +10,7 @@ import { Professional } from "../types";
 export function ProfessionalsPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { loading, professionals, user, toggleProfessionalActive  } = useAuth();
+  const { loading, professionals, user, toggleProfessionalActive, deleteProfessional } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProfessional, setSelectedProfessional] = useState<Professional | null>(null);
 
@@ -43,6 +43,7 @@ export function ProfessionalsPage() {
 
   const handleDelete = async () => {
     if (selectedProfessional) {
+      await deleteProfessional(selectedProfessional.id);
       setIsModalOpen(false);
     }
   };
@@ -58,12 +59,7 @@ export function ProfessionalsPage() {
   return (
     <div className="w-screen h-screen bg-white flex flex-col">
       <div className="p-6 flex-none">
-        <button 
-          onClick={() => navigate('/home')}
-          className="underline text-md self-start mt-2 ml-1"
-        >
-          {t('Common.Buttons.Back')}
-        </button>
+        <HeaderNavigation backRoute="/home" showHomeButton={true} />
 
         <h1 className="text-center text-3xl font-bold my-6">
           {t('Professionals.Title')}
@@ -101,6 +97,8 @@ export function ProfessionalsPage() {
                 category={professional?.category}
                 imageUrl={String(professional?.photo)}
                 professional={professional}
+                active={professional?.active}
+                user={user}
                 onProfessionalClick={() => handleProfessionalClick(professional)}
               />
             ))
@@ -124,7 +122,7 @@ export function ProfessionalsPage() {
         isActive={selectedProfessional?.active || false}
         onToggleActive={handleToggleActive}
         onEdit={() => {
-          navigate(`/edit-professional/${selectedProfessional?.id}`);
+          navigate(`professionals/edit/${selectedProfessional?.id}`);
         }}
         onDelete={handleDelete}
       />
