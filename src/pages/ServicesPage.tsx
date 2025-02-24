@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { useTranslation } from 'react-i18next';
-import { SearchBar, ProfessionalFilter, IconButton, TextSeparator, Spinner, ServiceCard, ManagementModal } from '../components';
+import { SearchBar, ProfessionalFilter, IconButton, TextSeparator, Spinner, ServiceCard, ManagementModal, HeaderNavigation } from '../components';
 import AddCircleIcon from '@mui/icons-material/AddCircleOutline';
 import { useAuth } from '../hooks/useAuth';
 import { useService } from '../hooks/useService';
@@ -34,7 +34,7 @@ export function ServicesPage() {
   }, [user, professionals, selectedProfessionalId, setSelectedProfessionalId]);
 
   const handleNavigateToRegister = () => {
-    navigate('/create');
+    navigate('/services/create');
   };
 
   const handleServiceClick = (service: Service) => {
@@ -71,12 +71,7 @@ export function ServicesPage() {
   return (
     <div className="w-screen h-screen bg-white flex flex-col">
       <div className="p-6 flex-none">
-        <button 
-          onClick={() => navigate('/home')}
-          className="underline text-md self-start mt-2 ml-1"
-        >
-          {t('Common.Buttons.Back')}
-        </button>
+        <HeaderNavigation backRoute="/home" showHomeButton={true} />
 
         <h1 className="text-center text-3xl font-bold my-6">
           {t('Services.Title')}
@@ -161,7 +156,7 @@ export function ServicesPage() {
         isActive={selectedService?.active || false}
         onToggleActive={handleToggleActive}
         onEdit={() => {
-          navigate(`/edit/${selectedService?.id}`);
+          navigate(`/services/edit/${selectedService?.id}`);
         }}
         onDelete={handleDelete}
       />
