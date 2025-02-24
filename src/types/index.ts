@@ -29,3 +29,4 @@ export type * from "./toggle-switch-props";
 export type * from "./form-service-props";
 export type * from "./header-navigation-props";
 export type * from "./register-professional-input-props";
+export type * from "./payload-professional";
