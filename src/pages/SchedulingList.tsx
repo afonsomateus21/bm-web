@@ -176,6 +176,7 @@ export function SchedulingList() {
             navigate(`edit/${selectedAppointment?.id}`);
           }}
           onDelete={ handleDelete }
+          userType={user?.type}
         />
       </div>
   );

@@ -1,3 +1,5 @@
+import { UserType } from "./user-types";
+
 export interface AppointmentModalProps {
   isOpen: boolean;
   serviceTitle: string;
@@ -8,4 +10,5 @@ export interface AppointmentModalProps {
   onEdit: () => void;
   onDelete: () => void;
   onClose: () => void;
+  userType: UserType;
 }
