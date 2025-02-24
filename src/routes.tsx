@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router";
-import { HomePage, Login, UserRegister, ServicesPage, ProfessionalsPage } from "./pages";
+import { HomePage, Login, UserRegister, ServicesPage, ProfessionalsPage, ServiceRegister, ServiceEdit } from "./pages";
 import { LoginRoute, ProtectedRoute } from "./components";
 
 export const router = createBrowserRouter([
@@ -28,6 +28,14 @@ export const router = createBrowserRouter([
       {
         path: "services/",
         element: <ServicesPage />,
+      },
+      {
+        path: "services/create",
+        element: <ServiceRegister />,
+      },
+      {
+        path: "services/edit/:id",
+        element: <ServiceEdit />,
       },
       {
         path: "professionals/",
