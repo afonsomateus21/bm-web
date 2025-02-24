@@ -1,10 +1,9 @@
-import { useNavigate } from "react-router";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { ChangeEvent, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { FormInput, FlatButton, PhotoInput } from '../components';
+import { FormInput, FlatButton, PhotoInput, HeaderNavigation } from '../components';
 import { RegisterFormInputProps, User } from '../types';
 import { formatPhone, registerSchema } from '../utils';
 import { useAuth, useShowPassword } from '../hooks';
@@ -12,7 +11,6 @@ import { useTranslation } from 'react-i18next';
 
 export function UserRegister() {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const { 
     register, 
     setValue, 
@@ -74,12 +72,8 @@ export function UserRegister() {
 
   return (
     <main className="h-screen flex flex-col justify-evenly overflow-hidden px-5">
-      <button 
-        onClick={() => navigate(-1)}
-        className="underline text-md ml-2 self-start"
-      >
-        { t('Common.Buttons.Back') }
-      </button>
+      <HeaderNavigation backRoute="/login" showHomeButton={false} />
+
       <h1 className="text-4xl text-center font-bold">
         { t('Common.Register.Title') }
       </h1>

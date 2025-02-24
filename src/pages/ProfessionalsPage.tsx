@@ -17,7 +17,7 @@ export function ProfessionalsPage() {
   const hasProfessional = professionals?.length;
 
   const handleNavigateToRegister = () => {
-    navigate('/create');
+    navigate('/professionals/create');
   };
 
   const handleProfessionalClick = (professional: Professional) => {
@@ -26,7 +26,7 @@ export function ProfessionalsPage() {
   };
 
   const handleToggleActive = async () => {
-    if (selectedProfessional) {
+    if (selectedProfessional && selectedProfessional.id) {
       const newActiveStatus = !selectedProfessional.active;
       await toggleProfessionalActive(selectedProfessional.id, newActiveStatus);
       setSelectedProfessional((prev) => {
@@ -40,9 +40,9 @@ export function ProfessionalsPage() {
       });
     }
   };
-
+  
   const handleDelete = async () => {
-    if (selectedProfessional) {
+    if (selectedProfessional && selectedProfessional.id) {
       await deleteProfessional(selectedProfessional.id);
       setIsModalOpen(false);
     }
@@ -95,7 +95,7 @@ export function ProfessionalsPage() {
                 key={professional?.id}
                 name={formatName(professional)}
                 category={professional?.category}
-                imageUrl={String(professional?.photo)}
+                imageUrl={String(professional?.profilePhoto)}
                 professional={professional}
                 active={professional?.active}
                 user={user}
@@ -118,11 +118,11 @@ export function ProfessionalsPage() {
         }}
         title={selectedProfessional ? formatName(selectedProfessional) : ''}
         subtitle={t(`Category.${selectedProfessional?.category}`)}
-        imageUrl={getPhotoUrl(selectedProfessional?.photo)}
+        imageUrl={getPhotoUrl(selectedProfessional?.profilePhoto)}
         isActive={selectedProfessional?.active || false}
         onToggleActive={handleToggleActive}
         onEdit={() => {
-          navigate(`professionals/edit/${selectedProfessional?.id}`);
+          navigate(`edit/${selectedProfessional?.id}`);
         }}
         onDelete={handleDelete}
       />

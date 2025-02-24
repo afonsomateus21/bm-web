@@ -167,7 +167,56 @@
   "Professionals": {
     "Title": "Profissionais",
     "Description": "Adicionar, editar, desativar ou excluir profissionais",
-    "HelpText": "Clique em um(a) profissional para visualizar mais opções"
+    "HelpText": "Clique em um(a) profissional para visualizar mais opções",
+    "Form": {
+      "CreateTitle": "Cadastrar Profissional",
+      "EditTitle": "Editar Profissional",
+      "Errors": {
+        "FirstName": {
+          "Required": "O nome é obrigatório"
+        },
+        "LastName": {
+          "Required": "O sobrenome é obrigatório"
+        },
+        "Email": {
+          "Required": "O email é obrigatório",
+          "Invalid": "Email inválido"
+        },
+        "Phone": {
+          "Required": "O telefone é obrigatório"
+        },
+        "Password": {
+          "Required": "A senha é obrigatória",
+          "Min": "A senha deve ter no mínimo 8 dígitos"
+        },
+        "ConfirmPassword": {
+          "Required": "A confirmação de senha é obrigatória",
+          "Invalid": "As senhas devem ser iguais"
+        },
+        "Category": {
+          "Required": "A categoria é obrigatória"
+        }
+      },
+      "Fields": {
+        "FirstName": "Nome",
+        "LastName": "Sobrenome",
+        "Email": "Email",
+        "Phone": "Telefone",
+        "Password": "Senha",
+        "PasswordConfirmation": "Confirmar Senha",
+        "Category": "Categoria dos Serviços",
+        "Photo": "Foto de perfil"
+      },
+      "Placeholders": {
+        "FirstName": "Digite seu nome",
+        "LastName": "Digite seu sobrenome",
+        "Email": "Digite seu email",
+        "Phone": "Digite seu telefone",
+        "Password": "Digite sua senha",
+        "PasswordConfirmation": "Confirme sua senha",
+        "Category": "Selecione a categoria"
+      }
+    }
   },
   "Category": {
     "LASHES": "Cílios", 

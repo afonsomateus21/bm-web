@@ -3,7 +3,7 @@ import { api } from "../../services";
 import { CustomProviderProps, Service, ApiServiceResponse } from "../../types";
 import { ServiceContext } from "./ServiceContext";
 import { useAuth } from "../../hooks/useAuth";
-import { handleUploadImageToStorage } from "../../utils";
+import { getPhotoUrl, handleUploadImageToStorage } from "../../utils";
 
 export const ServiceProvider = ({ children }: CustomProviderProps) => {
   const { accessToken, user } = useAuth();
@@ -95,6 +95,8 @@ export const ServiceProvider = ({ children }: CustomProviderProps) => {
           console.error("Erro ao fazer upload da imagem:", uploadError);
           throw new Error("Erro ao enviar a foto do serviço. Tente novamente.");
         }
+      } else {
+        servicePhotoUrl = getPhotoUrl(serviceInput.photo);
       }
 
       const service = {

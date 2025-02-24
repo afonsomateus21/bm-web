@@ -6,3 +6,5 @@ export { ServicesPage } from "./ServicesPage";
 export { ProfessionalsPage } from "./ProfessionalsPage";
 export { ServiceRegister } from "./ServiceRegister";
 export { ServiceEdit } from "./ServiceEdit";
+export { ProfessionalRegister } from "./ProfessionalRegister";
+export { ProfessionalEdit } from "./ProfessionalEdit";

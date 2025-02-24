@@ -76,7 +76,7 @@ export function CreateOrEditAppointment() {
       if (selectedProfessional) {
         const response = await getServicesByProfessional(selectedProfessional);
 
-        if (response.length === 0) {
+        if (response?.length === 0) {
           setServices([{ label: "Não encontrado", value: "" }]);
         } else {
           setServices(response);
@@ -94,10 +94,10 @@ export function CreateOrEditAppointment() {
         const formattedDate = selectedDate.toISOString().split('T')[0];
         const response = await getAvailableHoursByProfessionalAndDate(selectedProfessional, formattedDate);
 
-        if (response.length === availableHoursForAppointment.length) {
+        if (response?.length === availableHoursForAppointment?.length) {
           setAvailableHours([{ label: "Sem horários", value: "" }]);
         } else {
-          const hours = response.length === 0 
+          const hours = response?.length === 0 
             ? availableHoursForAppointment 
             : availableHoursForAppointment.filter(a => !response.includes(a));
           const hoursFormatted = hours.map(h => ({
