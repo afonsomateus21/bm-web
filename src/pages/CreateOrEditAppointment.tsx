@@ -24,7 +24,12 @@ export function CreateOrEditAppointment() {
       isNotifiable: true
     }
   });
-  const { professionals, createAppointment, getServicesByProfessional, getAvailableHoursByProfessionalAndDate } = useAppointment();
+  const { 
+    professionals, 
+    createAppointment, 
+    getServicesByProfessional, 
+    getAvailableHoursByProfessionalAndDate 
+  } = useAppointment();
   const selectedProfessional = watch("professional");
   const selectedDate = watch("date");
   const [services, setServices] = useState<{ label: string; value: string }[]>([]);
