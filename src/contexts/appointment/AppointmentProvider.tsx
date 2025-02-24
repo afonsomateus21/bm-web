@@ -7,6 +7,7 @@ import { useAuth } from "../../hooks";
 export const AppointmentProvider = ({ children }: CustomProviderProps) => {
   const [ appointment, setAppointment ] = useState<Appointment | null>();
   const [ professionals, setProfessionals ] = useState<{ label: string; value: string }[]>([]);
+  const [ customers, setCustomers ] = useState<{ label: string; value: string }[]>([]);
   const [ loading, setLoading ] = useState<boolean>(false);
   const { accessToken, user } = useAuth();
 
@@ -18,6 +19,17 @@ export const AppointmentProvider = ({ children }: CustomProviderProps) => {
 
     fetchProfessionals();
   }, []);
+
+  useEffect(() => {
+    const fetchCustomers = async () => {
+      if (user?.type === "ADMIN") {
+        const customersResponse = await getCustomers();
+        setCustomers(customersResponse);
+      }
+    }
+
+    fetchCustomers();
+  }, [user]);
 
   async function createAppointment(appointmentInput: AppointmentFormInput) {
     try {
@@ -62,6 +74,25 @@ export const AppointmentProvider = ({ children }: CustomProviderProps) => {
     const professionals = response.data ? response.data : [];
 
     return professionals.map(({ id, first_name, last_name }: { id: string; first_name: string; last_name: string }) => ({
+      label: `${first_name} ${last_name}`,
+      value: id! 
+    }));
+  }
+
+  async function getCustomers() {
+    const response = await api.get(
+      "/auth/user/customer",
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${accessToken}`
+        }
+      }
+    );
+
+    const customers = response.data ? response.data : [];
+
+    return customers.map(({ id, first_name, last_name }: { id: string; first_name: string; last_name: string }) => ({
       label: `${first_name} ${last_name}`,
       value: id! 
     }));
@@ -222,11 +253,41 @@ export const AppointmentProvider = ({ children }: CustomProviderProps) => {
     }
   }
 
+  async function createReservation(appointmentInput: AppointmentFormInput) {
+    try {
+      const appointment = {
+        "professional_id": appointmentInput.professional,
+        "customer_id": appointmentInput.customer,
+        "service_id": appointmentInput.service,
+        "date": appointmentInput.date.toISOString().split('T')[0],
+        "hour": parseInt(appointmentInput.hour),
+        "is_notifiable": appointmentInput.isNotifiable
+      }
+      const response = await api.post(
+        "/appointments",
+        appointment, 
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${accessToken}`
+          }
+        },
+      );
+      setAppointment(response.data);
+      return response.data;
+    } catch(error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <AppointmentContext.Provider 
       value={{ 
         appointment, 
         professionals,
+        customers,
         loading, 
         createAppointment,
         updateAppointment, 
@@ -234,7 +295,8 @@ export const AppointmentProvider = ({ children }: CustomProviderProps) => {
         getAvailableHoursByProfessionalAndDate,
         getService,
         listAppointmentsByCustomer,
-        listAppointmentsByCustomerAndDate
+        listAppointmentsByCustomerAndDate,
+        createReservation
       }}>
       { children }
     </AppointmentContext.Provider>
