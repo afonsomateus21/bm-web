@@ -26,6 +26,12 @@ export const AuthProvider = ({ children }: CustomProviderProps) => {
     fetchUser();
   }, [accessToken]);
 
+  useEffect(() => {
+    if (accessToken) {
+      fetchProfessionals();
+    }
+  }, [accessToken]);
+
   async function login(loginInput: LoginInput) {
     const response = await api.post("/auth/token", loginInput);
 
@@ -50,6 +56,7 @@ export const AuthProvider = ({ children }: CustomProviderProps) => {
       setAccessToken(null);
       setRefreshToken(null);
       setUser(null);
+      setProfessionals([]);
       
       localStorage.removeItem("access_token");
       localStorage.removeItem("refresh_token");
@@ -70,7 +77,7 @@ export const AuthProvider = ({ children }: CustomProviderProps) => {
             "Content-Type": "application/json"
           }
         }
-      )
+      );
 
       if (response.status !== 200) return logout();
 
@@ -107,7 +114,7 @@ export const AuthProvider = ({ children }: CustomProviderProps) => {
         "photo": data["photo"],
         "type": data["type"],
         "googleSub": data["google_sub"]
-      }
+      };
 
       setUser(currentUser);
     } catch(error: unknown) {
@@ -137,14 +144,58 @@ export const AuthProvider = ({ children }: CustomProviderProps) => {
         "phone": userInput.phone,
         "password": userInput.password,
         "photo": profilePhotoUrl
-      }
+      };
       const response = await api.post("/auth/user/customer", customer);
         
       return response.data;
     } catch(error) {
       console.log(error);
+      throw error;
     } finally {
-      await login({ email: userInput.email!, password: userInput.password! })
+      await login({ email: userInput.email!, password: userInput.password! });
+    }
+  }
+
+  async function createProfessional(professionalInput: Professional) {
+    try {
+      let profilePhotoUrl: string | null = null;
+    
+      if (professionalInput.photo) {
+        try {
+          profilePhotoUrl = await handleUploadImageToStorage("users", professionalInput.photo);
+        } catch (uploadError) {
+          console.error("Erro ao fazer upload da imagem:", uploadError);
+          throw new Error("Erro ao enviar a foto de perfil. Tente novamente.");
+        }
+      }
+
+      const professional = {
+        "first_name": professionalInput.firstName,
+        "last_name": professionalInput.lastName,
+        "category": professionalInput.category,
+        "email": professionalInput.email,
+        "phone": professionalInput.phone,
+        "password": professionalInput.password,
+        "photo": profilePhotoUrl,
+        "time_slots": professionalInput.timeSlots.map(slot => ({
+          day_of_week: slot.dayOfWeek,
+          start_time: slot.startTime,
+          end_time: slot.endTime
+        }))
+      };
+
+      const response = await api.post("/auth/user/professional", professional, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+        
+      await fetchProfessionals();
+      return response.data;
+    } catch(error) {
+      console.error("Erro ao criar profissional:", error);
+      throw error;
     }
   }
 
@@ -169,6 +220,11 @@ export const AuthProvider = ({ children }: CustomProviderProps) => {
         googleSub: admin.google_sub,
         category: admin.category,
         active: admin.active,
+        timeSlots: admin.time_slots?.map(slot => ({
+          dayOfWeek: slot.day_of_week,
+          startTime: slot.start_time,
+          endTime: slot.end_time
+        })) || []
       }));
       setProfessionals(admins);
     } catch (error: unknown) {
@@ -176,17 +232,11 @@ export const AuthProvider = ({ children }: CustomProviderProps) => {
     }
   };
 
-
-  useEffect(() => {
-    if (accessToken) {
-      fetchProfessionals();
-    }
-  }, [accessToken]);
-
-  const toggleProfessionalActive = async (professionalId: string, newActiveStatus: boolean) => {
+  const toggleProfessionalActive = async (professionalId: string | undefined, newActiveStatus: boolean) => {
     try {
       await api.put(
-        `/auth/user/${professionalId}`, { active: newActiveStatus },
+        `/auth/user/${professionalId}`,
+        { active: newActiveStatus },
         {
           headers: {
             "Content-Type": "application/json",
@@ -194,15 +244,33 @@ export const AuthProvider = ({ children }: CustomProviderProps) => {
           },
         }
       );
-  
-      setProfessionals((prevProfessionals) =>
-        prevProfessionals.map((prof) =>
-          prof.id === professionalId ? { ...prof, newActiveStatus } : prof
-        )
-      );
+
+      await fetchProfessionals();
     } catch (error) {
       console.error("Erro ao alternar status do profissional:", error);
       throw error;
+    }
+  };
+
+  const deleteProfessional = async (professionalId: string) => {
+    if (!accessToken) {
+      throw new Error("Usuário não autenticado.");
+    }
+  
+    try {
+      setLoading(true);
+      await api.delete(`/auth/user/${professionalId}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+  
+      await fetchProfessionals();
+    } catch (error) {
+      console.error("Erro ao excluir usuário:", error);
+      throw new Error("Erro ao excluir usuário. Tente novamente.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -218,11 +286,13 @@ export const AuthProvider = ({ children }: CustomProviderProps) => {
         login,
         logout,
         createCustomer,
+        createProfessional,
         fetchProfessionals,
         toggleProfessionalActive,
+        deleteProfessional,
       }}
     >
       {children}
     </AuthContext.Provider>
-  )
-}
+  );
+};
