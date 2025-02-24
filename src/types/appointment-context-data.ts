@@ -12,6 +12,8 @@ export interface AppointmentContextData {
   getAvailableHoursByProfessionalAndDate: (professional_id: string, date: string) => Promise<number[]>;
   getService: (id: string) => Promise<Appointment>;
   listAppointmentsByCustomer: () => Promise<Appointment[]>;
+  listAppointmentsByProfessional: () => Promise<Appointment[]>;
   listAppointmentsByCustomerAndDate: (date: string) => Promise<Appointment[]>;
   createReservation: (appointmentInput: AppointmentFormInput) => Promise<Appointment | undefined>;
+  removeAppointment: (id: string | undefined) => Promise<void>;
 }

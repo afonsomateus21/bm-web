@@ -38,3 +38,4 @@ export type * from "./management-modal-props";
 export type * from "./toggle-switch-props";
 export type * from "./form-service-props";
 export type * from "./header-navigation-props";
+export type * from "./appointment-modal-props";

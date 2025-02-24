@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { IconButton, SearchDateInput, ServiceScheduled, Spinner } from "../components";
-import { useAppointment } from "../hooks";
+import { useAppointment, useAuth } from "../hooks";
 import { Appointment, SearchByDateInput } from "../types";
 import { format, parseISO } from "date-fns";
 import { useTranslation } from "react-i18next";
@@ -8,47 +8,87 @@ import DateRangeIcon from '@mui/icons-material/DateRange';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { useForm, Controller } from "react-hook-form";
 import { useNavigate } from "react-router";
+import { AppointmentModal } from "../components/general/AppointmentModal";
 
 
 export function SchedulingList() {
   const { t } = useTranslation();
+  const { user } = useAuth();
   const { 
     loading, 
     listAppointmentsByCustomer,
-    listAppointmentsByCustomerAndDate
+    listAppointmentsByProfessional,
+    listAppointmentsByCustomerAndDate,
+    removeAppointment
   } = useAppointment();
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const navigate = useNavigate();
   const { 
     control,
   } = useForm<SearchByDateInput>();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
 
   useEffect(() => {
-    const fetchAppointmentsByCustomer = async () => {
-      const response = await listAppointmentsByCustomer();
-
-      setAppointments(response);
+    const fetchAppointments = async () => {
+      let response;
+      if (user?.type === "ADMIN") {
+        response = await listAppointmentsByProfessional();
+      } else {
+        response = await listAppointmentsByCustomer();
+      }
+      setAppointments(response || []);
     }
 
-    fetchAppointmentsByCustomer();
-  }, []);
+    fetchAppointments();
+  }, [user]);
 
   async function handleChangeDate(value) {
-    const date = value
-    console.log(date);
     try {
-      const response = await listAppointmentsByCustomerAndDate(date.toISOString().split('T')[0]);
-      console.log(response);
-      if (!response || response.length === 0) {
+      if (!value) {
         setAppointments([]);
         return;
       }
-      setAppointments(response);
+      
+      const dateString = value.toISOString().split('T')[0];
+      const response = await listAppointmentsByCustomerAndDate(dateString);
+      
+      setAppointments(response || []);
     } catch(e) {
-      setAppointments([])
+      console.error("Error fetching appointments:", e);
+      setAppointments([]);
     }
   }
 
+  const fetchAppointments = async () => {
+    let response;
+    try {
+      if (user?.type === "ADMIN") {
+        response = await listAppointmentsByProfessional();
+      } else {
+        response = await listAppointmentsByCustomer();
+      }
+      setAppointments(response || []);
+    } catch (error) {
+      console.error("Error fetching appointments:", error);
+      setAppointments([]);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (selectedAppointment) {
+      try {
+        await removeAppointment(selectedAppointment.id);
+        
+        fetchAppointments();
+        
+        setIsModalOpen(false);
+        setSelectedAppointment(null);
+      } catch (error) {
+        console.error("Error deleting appointment:", error);
+      }
+    }
+  };
 
   return (
     loading 
@@ -98,10 +138,13 @@ export function SchedulingList() {
         </div>
         <div className="flex flex-col gap-2 h-[500px] overflow-y-scroll">
           {
-            appointments.length > 0 
+            appointments?.length > 0 
             ? appointments.map(appointment => (
               <ServiceScheduled 
-                onClick={ () => navigate(`edit/${appointment.id}`) }
+                onClick={ () => {
+                  setSelectedAppointment(appointment);
+                  setIsModalOpen(true);
+                }}
                 key={appointment.id}
                 photo={appointment.service.photo}
                 serviceTitle={appointment.service.title}
@@ -118,6 +161,22 @@ export function SchedulingList() {
             </div>
           }
         </div>
+        <AppointmentModal
+          isOpen={isModalOpen}
+          onClose={() => {
+            setIsModalOpen(false);
+            setSelectedAppointment(null);
+          }}
+          serviceTitle={selectedAppointment?.service?.title || ''}
+          professionalName={ `${selectedAppointment?.professional?.first_name} ${selectedAppointment?.professional?.last_name}` }
+          customerName={ `${selectedAppointment?.customer?.first_name} ${selectedAppointment?.customer?.last_name}` }
+          date={ selectedAppointment?.date }
+          hour={ `${selectedAppointment?.hour}:00` }
+          onEdit={() => {
+            navigate(`edit/${selectedAppointment?.id}`);
+          }}
+          onDelete={ handleDelete }
+        />
       </div>
   );
 }

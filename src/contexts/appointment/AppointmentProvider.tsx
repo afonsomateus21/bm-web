@@ -282,6 +282,44 @@ export const AppointmentProvider = ({ children }: CustomProviderProps) => {
     }
   }
 
+  async function removeAppointment(id: string | undefined) {
+    await api.delete(
+      `/appointments/${id}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${accessToken}`
+        }
+      }
+    );
+  } 
+
+  async function listAppointmentsByProfessional() {
+    try {
+      setLoading(true);
+      const response = await api.get(
+        "/appointments/professional",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${accessToken}`
+          },
+          params: {
+            "professional_id": user?.id
+          }
+        }
+      );
+  
+      const appointments = response.data ? response.data : [];
+  
+      return appointments;
+    } catch(e) {
+      console.log(e);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <AppointmentContext.Provider 
       value={{ 
@@ -295,8 +333,10 @@ export const AppointmentProvider = ({ children }: CustomProviderProps) => {
         getAvailableHoursByProfessionalAndDate,
         getService,
         listAppointmentsByCustomer,
+        listAppointmentsByProfessional,
         listAppointmentsByCustomerAndDate,
-        createReservation
+        createReservation,
+        removeAppointment
       }}>
       { children }
     </AppointmentContext.Provider>
