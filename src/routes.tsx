@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router";
-import { CreateOrEditAppointment, HomePage, Login, UserRegister, ServicesPage, ProfessionalsPage, ServiceRegister, ServiceEdit } from "./pages";
+import { CreateOrEditAppointment, HomePage, Login, UserRegister, ServicesPage, ProfessionalsPage, ServiceRegister, ServiceEdit, ProfessionalRegister, ProfessionalEdit } from "./pages";
 import { LoginRoute, ProtectedRoute, SchedulingRoute } from "./components";
 import { SchedulingList } from "./pages/SchedulingList";
 
@@ -41,6 +41,14 @@ export const router = createBrowserRouter([
       {
         path: "professionals/",
         element: <ProfessionalsPage />,
+      },
+      {
+        path: "professionals/create",
+        element: <ProfessionalRegister />,
+      },
+      {
+        path: "professionals/edit/:id",
+        element: <ProfessionalEdit />,
       },
       {
         path: "appointments",
