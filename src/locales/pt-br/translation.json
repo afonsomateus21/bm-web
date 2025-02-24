@@ -25,6 +25,9 @@
         "Professional": {
           "Required": "É necessário escolher um profissional"
         },
+        "Customer": {
+          "Required": "É necessário escolher um cliente"
+        },
         "Service": {
           "Required": "É necessário escolher um serviço"
         },
@@ -44,7 +47,8 @@
         "PasswordConfirmation": "Confirmar Senha",
         "Professional": "Profissional",
         "Service": "Serviço",
-        "Notification": "Desejo receber notificações e alertas"
+        "Notification": "Desejo receber notificações e alertas",
+        "Customer": "Cliente"
       },
       "Placeholders": {
         "FirstName": "Digite seu nome",
@@ -154,7 +158,11 @@
     "Button": {
       "NewScheduling": "Novo Agendamento"
     },
-    "Description": "Realizar, desmarcar ou visualizar agendamentos"
+    "Description": "Realizar, desmarcar ou visualizar agendamentos",
+    "Reservation": {
+      "Create": "Reservar Horário",
+      "Edit": "Editar Reserva"
+    }
   },
   "Professionals": {
     "Title": "Profissionais",

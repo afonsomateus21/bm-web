@@ -7,12 +7,13 @@ import { useForm, Controller } from "react-hook-form";
 import { Appointment, AppointmentFormInput } from "../types";
 import { appointmentSchema, availableHoursForAppointment } from "../utils";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useAppointment } from "../hooks";
+import { useAppointment, useAuth } from "../hooks";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router";
 
 export function CreateOrEditAppointment() {
   const { t } = useTranslation();
+  const { user } = useAuth();
   const { 
     control,
     register, 
@@ -21,14 +22,16 @@ export function CreateOrEditAppointment() {
     reset,
     formState: { errors }
   } = useForm<AppointmentFormInput>({ 
-    resolver: yupResolver(appointmentSchema(t)),
+    resolver: yupResolver(appointmentSchema(t, user?.type === "ADMIN")),
     defaultValues: {
       isNotifiable: true,
     }
   });
   const { 
     professionals, 
+    customers,
     createAppointment, 
+    createReservation,
     updateAppointment,
     getServicesByProfessional, 
     getAvailableHoursByProfessionalAndDate,
@@ -115,7 +118,11 @@ export function CreateOrEditAppointment() {
 
     try{
       if (!isEdit) {
-        await createAppointment(data);
+        if (user?.type === "CUSTOMER") {
+          await createAppointment(data);
+        } else if (user?.type === "ADMIN") {
+          await createReservation(data);
+        }
       } else {
         await updateAppointment(id!, data);
       }
@@ -130,6 +137,13 @@ export function CreateOrEditAppointment() {
     <div className="h-full flex flex-col gap-6">
       <h1 className="text-4xl font-bold text-center mt-6">
         { 
+          user?.type === "ADMIN"
+          ? (
+            isEdit 
+            ? t('Scheduling.Reservation.Edit')
+            : t('Scheduling.Reservation.Create') 
+          )
+          :
           isEdit 
           ? t('Scheduling.Edit')
           : t('Scheduling.Create') 
@@ -140,6 +154,24 @@ export function CreateOrEditAppointment() {
         onSubmit={ handleSubmit(onSubmit) }
         className="flex flex-col gap-6"
       >
+        {
+          user?.type === "ADMIN" &&
+          <Controller 
+            name="customer"
+            control={ control }
+            defaultValue=""
+            render={({ field }) => (
+              <CustomSelect 
+                title="Cliente"
+                options={ customers }
+                value={ field.value! }
+                onChange={ field.onChange }
+                errors={ errors?.customer?.message }
+              />
+            )}  
+          />
+        }
+
         <Controller 
           name="professional"
           control={ control }
