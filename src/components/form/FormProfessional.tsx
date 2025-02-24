@@ -1,10 +1,10 @@
 import { ChangeEvent, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import { FormInput, FlatButton, PhotoInput, HeaderNavigation } from '../../components';
+import { FormInput, FlatButton, PhotoInput, HeaderNavigation, CustomSelect } from '../../components';
 import { formatPhone, getPhotoUrl, registerProfessionalSchema } from '../../utils';
 import { useAuth, useShowPassword } from '../../hooks';
 import { useTranslation } from 'react-i18next';
@@ -12,7 +12,7 @@ import { RegisterProfessionalFormInputProps } from '../../types';
 
 interface FormProfessionalProps {
   isEdit?: boolean;
-  professionalId?: string
+  professionalId?: string;
 }
 
 export function FormProfessional({ isEdit = false, professionalId }: FormProfessionalProps) {
@@ -29,7 +29,8 @@ export function FormProfessional({ isEdit = false, professionalId }: FormProfess
     handleSubmit,
     formState: { errors },
     watch,
-    reset
+    reset,
+    control
   } = useForm<RegisterProfessionalFormInputProps>({
     defaultValues: {
       firstName: "",
@@ -43,6 +44,13 @@ export function FormProfessional({ isEdit = false, professionalId }: FormProfess
 
   const firstName = watch("firstName", "");
   const lastName = watch("lastName", "");
+
+  const categories = [
+    { label: t("Category.LASHES"), value: "LASHES" },
+    { label: t("Category.NAILS"), value: "NAILS" },
+    { label: t("Category.FOOT_HAND"), value: "FOOT_HAND" },
+    { label: t("Category.HAIR"), value: "HAIR" },
+  ];
 
   useEffect(() => {
     if (isEdit && professionalId) {
@@ -139,13 +147,22 @@ export function FormProfessional({ isEdit = false, professionalId }: FormProfess
               handleTextChange("lastName", e.target.value)}
             errors={errors?.lastName?.message}
           />
-          <FormInput 
-            title={t('Professionals.Form.Fields.Category')}
-            placeholder={t('Professionals.Form.Placeholders.Category')}
-            required
-            {...register("category")}
-            errors={errors?.category?.message}
+
+          <Controller 
+            name="category"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <CustomSelect 
+                title={t('Professionals.Form.Fields.Category')}
+                options={categories}
+                value={field.value}
+                onChange={field.onChange}
+                errors={errors?.category?.message}
+              />
+            )}
           />
+
           <FormInput 
             title={t('Professionals.Form.Fields.Email')}
             type="email"
