@@ -5,7 +5,7 @@ import DateRangeIcon from '@mui/icons-material/DateRange';
 import InfoIcon from '@mui/icons-material/Info';
 import { useForm, Controller } from "react-hook-form";
 import { AppointmentFormInput } from "../types";
-import { appointmentSchema } from "../utils";
+import { appointmentSchema, availableHoursForAppointment } from "../utils";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useAppointment } from "../hooks";
 import { useEffect, useState } from "react";
@@ -19,10 +19,11 @@ export function CreateOrEditAppointment() {
     watch,
     formState: { errors } 
   } = useForm<AppointmentFormInput>({ resolver: yupResolver(appointmentSchema(t)) });
-  const { professionals, createAppointment, getServicesByProfessional } = useAppointment();
+  const { professionals, createAppointment, getServicesByProfessional, getAvailableHoursByProfessionalAndDate } = useAppointment();
   const selectedProfessional = watch("professional");
   const selectedDate = watch("date");
   const [services, setServices] = useState<{ label: string; value: string }[]>([]);
+  const [availableHours, setAvailableHours] = useState<{ label: string; value: string }[]>([]);
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -30,7 +31,6 @@ export function CreateOrEditAppointment() {
         const response = await getServicesByProfessional(selectedProfessional);
 
         if (response.length === 0) {
-          console.log('entrou');
           setServices([{ label: "Não encontrado", value: "" }]);
         } else {
           setServices(response);
@@ -41,6 +41,32 @@ export function CreateOrEditAppointment() {
     fetchServices();
 
   }, [selectedProfessional])
+
+  useEffect(() => {
+    const fetchServices = async () => {
+      if (selectedProfessional && selectedDate) {
+        const formattedDate = selectedDate.toISOString().split('T')[0];
+        const response = await getAvailableHoursByProfessionalAndDate(selectedProfessional, formattedDate);
+
+        if (response.length === availableHoursForAppointment.length) {
+          console.log('entrou');
+          setAvailableHours([{ label: "Sem horários", value: "" }]);
+        } else {
+          const hours = response.length === 0 
+            ? availableHoursForAppointment 
+            : availableHoursForAppointment.filter(a => !response.includes(a));
+          const hoursFormatted = hours.map(h => ({
+            label: `${h}:00`,
+            value: `${h}`
+          }));
+          setAvailableHours(hoursFormatted);
+        }
+      }
+    }
+
+    fetchServices();
+
+  }, [selectedProfessional, selectedDate])
 
   async function onSubmit(data: AppointmentFormInput) {
     console.log(data);
@@ -123,16 +149,7 @@ export function CreateOrEditAppointment() {
                   fontSize="large"
                 />
               }
-              options={[
-                {
-                  value: "08:00",
-                  label: "08:00"
-                },
-                {
-                  value: "09:00",
-                  label: "09:30"
-                },
-              ]}
+              options={availableHours}
               value={ field.value }
               onChange={ field.onChange }
               errors={ errors?.hour?.message }
