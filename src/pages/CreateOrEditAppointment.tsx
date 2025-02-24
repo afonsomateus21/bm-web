@@ -9,7 +9,7 @@ import { appointmentSchema, availableHoursForAppointment } from "../utils";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useAppointment } from "../hooks";
 import { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router";
+import { useLocation, useNavigate, useParams } from "react-router";
 
 export function CreateOrEditAppointment() {
   const { t } = useTranslation();
@@ -42,6 +42,7 @@ export function CreateOrEditAppointment() {
   const location = useLocation();
   const { id } = useParams();
   const isEdit = /\bedit\b/i.test(location.pathname);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchService = async () => {
@@ -112,10 +113,16 @@ export function CreateOrEditAppointment() {
   async function onSubmit(data: AppointmentFormInput) {
     console.log(data);
 
-    if (!isEdit) {
-      await createAppointment(data);
-    } else {
-      await updateAppointment(id!, data);
+    try{
+      if (!isEdit) {
+        await createAppointment(data);
+      } else {
+        await updateAppointment(id!, data);
+      }
+    } catch(e) {
+      console.log(e);
+    } finally {
+      navigate("/appointments");
     }
   }
 
