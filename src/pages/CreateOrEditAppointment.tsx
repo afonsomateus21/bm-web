@@ -7,6 +7,8 @@ import { useForm, Controller } from "react-hook-form";
 import { AppointmentFormInput } from "../types";
 import { appointmentSchema } from "../utils";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useAppointment } from "../hooks";
+import { useEffect, useState } from "react";
 
 export function CreateOrEditAppointment() {
   const { t } = useTranslation();
@@ -14,11 +16,35 @@ export function CreateOrEditAppointment() {
     control,
     register, 
     handleSubmit, 
+    watch,
     formState: { errors } 
   } = useForm<AppointmentFormInput>({ resolver: yupResolver(appointmentSchema(t)) });
+  const { professionals, createAppointment, getServicesByProfessional } = useAppointment();
+  const selectedProfessional = watch("professional");
+  const [services, setServices] = useState<{ label: string; value: string }[]>([]);
 
-  function onSubmit(data: AppointmentFormInput) {
+  useEffect(() => {
+    const fetchServices = async () => {
+      if (selectedProfessional) {
+        const response = await getServicesByProfessional(selectedProfessional);
+
+        if (response.length === 0) {
+          console.log('entrou');
+          setServices([{ label: "Não encontrado", value: "" }]);
+        } else {
+          setServices(response);
+        }
+      }
+    }
+
+    fetchServices();
+
+  }, [selectedProfessional])
+
+  async function onSubmit(data: AppointmentFormInput) {
     console.log(data);
+
+    await createAppointment(data);
   }
 
   return (
@@ -38,16 +64,7 @@ export function CreateOrEditAppointment() {
           render={({ field }) => (
             <CustomSelect 
               title="Profissional"
-              options={[
-                {
-                  value: "sasasadasds",
-                  label: "Samara"
-                },
-                {
-                  value: "dasdadsadas",
-                  label: "Letícia"
-                },
-              ]}
+              options={ professionals }
               value={ field.value }
               onChange={ field.onChange }
               errors={ errors?.professional?.message }
@@ -62,16 +79,7 @@ export function CreateOrEditAppointment() {
           render={({ field }) => (
             <CustomSelect 
               title="Serviço"
-              options={[
-                {
-                  value: "sasasadasds",
-                  label: "Lash"
-                },
-                {
-                  value: "dasdadsadas",
-                  label: "Unhas"
-                },
-              ]}
+              options={ services }
               value={ field.value }
               onChange={ field.onChange }
               errors={ errors?.service?.message }
