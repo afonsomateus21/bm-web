@@ -11,6 +11,6 @@ export interface ServiceContextType {
   filterServices: (term: string) => void;
   setSelectedProfessionalId: (professionalId: string | null) => void;
   createService: (serviceInput: Service) => Promise<void>;
-  toggleServiceActive: (serviceId: string) => Promise<void>; // Nova função
-  deleteService: (serviceId: string) => Promise<void>; // Nova função
+  toggleServiceActive: (serviceId: string) => Promise<void>;
+  deleteService: (serviceId: string) => Promise<void>;
 }
