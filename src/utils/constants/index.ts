@@ -1,0 +1,1 @@
+export { availableHoursForAppointment } from "./available-hours";
