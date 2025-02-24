@@ -44,7 +44,7 @@ export function HomePage() {
             title={t('Scheduling.Title')}
             description={t('Scheduling.Description')}
             imageUrl={SchedulingImage}
-            redirectTo="/services"
+            redirectTo="/appointments"
           />
 
           <HomeOption 
