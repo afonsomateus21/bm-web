@@ -15,3 +15,4 @@ export type * from "./custom-select-props";
 export type * from "./footer-props";
 export type * from "./date-input-props";
 export type * from "./appointment-form-input";
+export type * from "./appointment";
