@@ -4,11 +4,12 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import InfoIcon from '@mui/icons-material/Info';
 import { useForm, Controller } from "react-hook-form";
-import { AppointmentFormInput } from "../types";
+import { Appointment, AppointmentFormInput } from "../types";
 import { appointmentSchema, availableHoursForAppointment } from "../utils";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useAppointment } from "../hooks";
 import { useEffect, useState } from "react";
+import { useLocation, useParams } from "react-router";
 
 export function CreateOrEditAppointment() {
   const { t } = useTranslation();
@@ -17,23 +18,54 @@ export function CreateOrEditAppointment() {
     register, 
     handleSubmit, 
     watch,
+    reset,
     formState: { errors }
   } = useForm<AppointmentFormInput>({ 
     resolver: yupResolver(appointmentSchema(t)),
     defaultValues: {
-      isNotifiable: true
+      isNotifiable: true,
     }
   });
   const { 
     professionals, 
     createAppointment, 
+    updateAppointment,
     getServicesByProfessional, 
-    getAvailableHoursByProfessionalAndDate 
+    getAvailableHoursByProfessionalAndDate,
+    getService
   } = useAppointment();
   const selectedProfessional = watch("professional");
   const selectedDate = watch("date");
   const [services, setServices] = useState<{ label: string; value: string }[]>([]);
   const [availableHours, setAvailableHours] = useState<{ label: string; value: string }[]>([]);
+  const [appointment, setAppointment] = useState<Appointment | null>(null);
+  const location = useLocation();
+  const { id } = useParams();
+  const isEdit = /\bedit\b/i.test(location.pathname);
+
+  useEffect(() => {
+    const fetchService = async () => {
+      if (isEdit) {
+        const response = await getService(id!);
+        setAppointment(response);
+      }
+    }
+
+    fetchService();
+  }, [])
+
+  useEffect(() => {
+    if (isEdit && appointment) {
+      console.log(appointment);
+      reset({
+        professional: appointment.professional._id,
+        service: appointment.service._id,
+        date: new Date(appointment.date),
+        hour: `${appointment.hour}`,
+        isNotifiable: appointment.isNotifiable
+      });
+    }
+  }, [appointment, isEdit, reset]);
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -59,7 +91,6 @@ export function CreateOrEditAppointment() {
         const response = await getAvailableHoursByProfessionalAndDate(selectedProfessional, formattedDate);
 
         if (response.length === availableHoursForAppointment.length) {
-          console.log('entrou');
           setAvailableHours([{ label: "Sem horários", value: "" }]);
         } else {
           const hours = response.length === 0 
@@ -81,13 +112,21 @@ export function CreateOrEditAppointment() {
   async function onSubmit(data: AppointmentFormInput) {
     console.log(data);
 
-    await createAppointment(data);
+    if (!isEdit) {
+      await createAppointment(data);
+    } else {
+      await updateAppointment(id!, data);
+    }
   }
 
   return (
     <div className="h-full flex flex-col gap-6">
       <h1 className="text-4xl font-bold text-center mt-6">
-        { t('Scheduling.Create') }
+        { 
+          isEdit 
+          ? t('Scheduling.Edit')
+          : t('Scheduling.Create') 
+        }
       </h1>
 
       <form 
@@ -184,7 +223,11 @@ export function CreateOrEditAppointment() {
 
         <FlatButton 
           type="submit"
-          title="Agendar"
+          title={
+            isEdit 
+            ? t('Scheduling.Edit')
+            : t('Scheduling.Create')
+          }
         />
       </form>
       <Footer 
