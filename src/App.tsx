@@ -1,7 +1,7 @@
 import { RouterProvider } from 'react-router';
 import './index.css'
 import { router } from './routes';
-import { AppointmentProvider, AuthProvider, PasswordProvider } from './contexts';
+import { AuthProvider, PasswordProvider, ServiceProvider, AppointmentProvider } from './contexts';
 import './i18n.ts';
 
 function App() {
@@ -10,7 +10,9 @@ function App() {
       <AuthProvider>
         <AppointmentProvider>
           <PasswordProvider>
-            <RouterProvider router={ router } />
+            <ServiceProvider>
+              <RouterProvider router={ router } />
+            </ServiceProvider>
           </PasswordProvider>
         </AppointmentProvider>
       </AuthProvider>
@@ -18,4 +20,4 @@ function App() {
   );
 }
 
-export default App
+export default App;

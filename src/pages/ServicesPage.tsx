@@ -1,0 +1,165 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
+import { useTranslation } from 'react-i18next';
+import { SearchBar, ProfessionalFilter, IconButton, TextSeparator, Spinner, ServiceCard, ManagementModal, HeaderNavigation } from '../components';
+import AddCircleIcon from '@mui/icons-material/AddCircleOutline';
+import { useAuth } from '../hooks/useAuth';
+import { useService } from '../hooks/useService';
+import { getPhotoUrl } from "../utils";
+import { Service } from "../types";
+
+export function ServicesPage() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedService, setSelectedService] = useState<Service | null>(null);
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const { professionals, user } = useAuth();
+  const { 
+    loading, 
+    filteredServices, 
+    filterServices,
+    selectedProfessionalId,
+    setSelectedProfessionalId,
+    toggleServiceActive,
+    deleteService,
+  } = useService();
+  
+  const hasServices = filteredServices?.length;
+
+  useEffect(() => {
+    if (user?.type === "CUSTOMER" && professionals?.length && !selectedProfessionalId) {
+      const firstProfessionalId = professionals[0]?.id ?? null;
+      setSelectedProfessionalId(firstProfessionalId);
+    }
+  }, [user, professionals, selectedProfessionalId, setSelectedProfessionalId]);
+
+  const handleNavigateToRegister = () => {
+    navigate('/services/create');
+  };
+
+  const handleServiceClick = (service: Service) => {
+    setSelectedService(service);
+    setIsModalOpen(true);
+  };
+
+  const handleToggleActive = async () => {
+    if (selectedService) {
+      const newActiveStatus = !selectedService.active;
+      await toggleServiceActive(selectedService.id, newActiveStatus);
+      setSelectedService((prevService) => ({
+        ...prevService,
+        active: newActiveStatus,
+      }));
+    }
+  };
+
+  const handleDelete = async () => {
+    if (selectedService) {
+      await deleteService(selectedService.id);
+      setIsModalOpen(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <Spinner color="#EF007F" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="w-screen h-screen bg-white flex flex-col">
+      <div className="p-6 flex-none">
+        <HeaderNavigation backRoute="/home" showHomeButton={true} />
+
+        <h1 className="text-center text-3xl font-bold my-6">
+          {t('Services.Title')}
+        </h1>
+
+        <SearchBar
+          placeholder={t('Services.SearchBar.Placeholder')}
+          onSearch={filterServices}
+        />
+
+        {user?.type === 'CUSTOMER' && (
+          <>
+            <TextSeparator
+              text={t('Services.ProfessionalFilter.Label')}
+              textSize="sm"
+              color="terciary"
+              fontWeight="medium"
+            />
+
+            <ProfessionalFilter
+              professionals={professionals}
+              selectedId={selectedProfessionalId}
+              onSelect={setSelectedProfessionalId}
+            />
+          </>
+        )}
+
+        {user?.type === 'ADMIN' && (
+          <>
+            <IconButton 
+              title={t('Common.Buttons.Add')}
+              icon={ 
+                <AddCircleIcon
+                  htmlColor={'white'} 
+                  fontSize={'large'}
+                /> 
+              }
+              onClick={handleNavigateToRegister}
+            />
+
+            <div className="flex justify-center py-5">
+              <div className="w-[30%] border-b border-black" />
+            </div>
+            
+            <p className="block mb-5 text-center text-sm">{t('Services.HelpText')}</p>
+          </>
+        )}
+      </div>
+
+      <div className="flex-1 overflow-hidden px-6">
+        <div className="h-full overflow-y-auto">
+          {hasServices ? (
+            filteredServices.map((service: Service) => (
+              <ServiceCard
+                key={service?.id}
+                title={service?.title}
+                description={service?.description}
+                price={service?.price}
+                imageUrl={getPhotoUrl(service.photo)}
+                user={user || null}
+                service={service}
+                onServiceClick={handleServiceClick}
+              />
+            ))
+          ) : (
+            <p className="text-center text-gray-500 mt-8">
+              {t('Services.NoServicesFound')}
+            </p>
+          )}
+        </div>
+      </div>
+
+      <ManagementModal
+        isOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+          setSelectedService(null);
+        }}
+        title={selectedService?.title || ''}
+        subtitle={selectedService?.description || ''}
+        imageUrl={getPhotoUrl(selectedService?.photo)}
+        isActive={selectedService?.active || false}
+        onToggleActive={handleToggleActive}
+        onEdit={() => {
+          navigate(`/services/edit/${selectedService?.id}`);
+        }}
+        onDelete={handleDelete}
+      />
+    </div>
+  );
+}

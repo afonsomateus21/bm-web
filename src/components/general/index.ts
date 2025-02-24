@@ -5,3 +5,6 @@ export { ProfilePhoto } from "./ProfilePhoto";
 export { TextSeparator } from "./TextSeparator";
 export { HelpComponent } from "./HelpComponent";
 export { Footer } from "./Footer";
+export { ManagementModal } from "./ManagementModal";
+export { ToggleSwitch } from "./ToggleSwitch";
+export { HeaderNavigation } from "./HeaderNavigation";

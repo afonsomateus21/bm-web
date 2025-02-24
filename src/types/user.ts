@@ -1,7 +1,4 @@
-enum UserType {
-  Admin = "ADMIN",
-  Customer = "CUSTOMER"
-}
+import { UserType } from "./user-types";
 
 export interface User {
   id?: string;

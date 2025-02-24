@@ -62,13 +62,16 @@
     },
     "Buttons": {
       "Back": "Voltar",
-      "Register": "Cadastrar"
+      "Register": "Cadastrar",
+      "Add": "Adicionar",
+      "Save": "Salvar"
     },
     "WelcomeMessage": "Seja bem-vinda,",
     "ProfileSubtitle": "Meu Perfil",
     "HomeQuestion": "O que você deseja?",
     "HelpMessage": "Está com alguma dúvida?",
-    "KeepInTouch": "Entre em contato."
+    "KeepInTouch": "Entre em contato.",
+    "ToggleActivation": "Ativar/desativar"
   },
   "Login": {
     "Buttons": {
@@ -83,11 +86,66 @@
   },
   "Services": {
     "Title": "Serviços",
-    "Description": "Visualizar todos os serviços e informações"
+    "Description": {
+      "ADMIN": "Adicionar, editar, desativar ou excluir serviços",
+      "CUSTOMER": "Visualizar todos os serviços e informações"
+    },
+    "SearchBar": {
+      "Placeholder": "Filtre pelo nome do serviço"
+    },
+    "Card": {
+      "Button": "Quero agendar",
+      "PriceUnavailable": "Não informado"
+    },
+    "NoServicesFound": "Nenhum serviço encontrado... :(",
+    "HelpText": "Clique em um serviço para visualizar mais opções",
+    "ProfessionalFilter": {
+      "Label": "ou por profissional"
+    },
+    "Form": {
+      "CreateTitle": "Cadastrar Serviço",
+      "EditTitle": "Editar Serviço",
+      "Errors": {
+        "Title": {
+          "Required": "O título é obrigatório"
+        },
+        "Description": {
+          "Required": "A descrição é obrigatória"
+        },
+        "Category": {
+          "Required": "A categoria é obrigatória"
+        },
+        "Professional": {
+          "Required": "O(a) profissional é obrigatório"
+        },
+        "Duration": {
+          "Required": "A duração é obrigatória"
+        },
+        "Price": {
+          "Required": "O preço é obrigatório"
+        }
+      },
+      "Fields": {
+        "Title": "Título",
+        "Description": "Descrição",
+        "Category": "Categoria do Serviço",
+        "Professional": "Profissional",
+        "Duration": "Duração",
+        "Price": "Valor",
+        "Photo": "Foto"
+      },
+      "Placeholders": {
+        "Title": "Digite um título",
+        "Description": "Digite uma descrição",
+        "Category": "Selecione a categoria",
+        "Professional": "Selecione a(o) profissional",
+        "Duration": "Digite a duração",
+        "Price": "Digite o valor"
+      }
+    }
   },
   "Scheduling": {
     "Title": "Agendamentos",
-    "Description": "Realizar ou visualizar agendamentos",
     "Create": "Agendar",
     "Edit": "Editar Agendamento",
     "SelectDateFirst": "Selecione primeiro a data",
@@ -95,6 +153,19 @@
     "NotFound": "Nenhum agendamento encontrado",
     "Button": {
       "NewScheduling": "Novo Agendamento"
-    }
+    },
+    "Description": "Realizar, desmarcar ou visualizar agendamentos"
+  },
+  "Professionals": {
+    "Title": "Profissionais",
+    "Description": "Adicionar, editar, desativar ou excluir profissionais",
+    "HelpText": "Clique em um(a) profissional para visualizar mais opções"
+  },
+  "Category": {
+    "LASHES": "Cílios", 
+    "NAILS": "Unhas",
+    "FOOT_HAND": "Pé & Mão",
+    "HAIR": "Cabelos",
+    "EYEBROW": "Sobrancelha"
   }
 }
