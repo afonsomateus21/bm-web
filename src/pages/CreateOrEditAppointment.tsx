@@ -21,6 +21,7 @@ export function CreateOrEditAppointment() {
   } = useForm<AppointmentFormInput>({ resolver: yupResolver(appointmentSchema(t)) });
   const { professionals, createAppointment, getServicesByProfessional } = useAppointment();
   const selectedProfessional = watch("professional");
+  const selectedDate = watch("date");
   const [services, setServices] = useState<{ label: string; value: string }[]>([]);
 
   useEffect(() => {
@@ -79,6 +80,7 @@ export function CreateOrEditAppointment() {
           render={({ field }) => (
             <CustomSelect 
               title="Serviço"
+              disabled={ !selectedProfessional }
               options={ services }
               value={ field.value }
               onChange={ field.onChange }
@@ -114,6 +116,7 @@ export function CreateOrEditAppointment() {
           render={({ field }) => (
             <CustomSelect 
               title="Hora"
+              disabled={ !selectedDate }
               icon={  
                 <AccessTimeIcon 
                   htmlColor="black"
