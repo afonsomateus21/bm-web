@@ -13,7 +13,7 @@ Este projeto consiste no front-end do Beauty Manager, uma aplicação de agendam
 - Henrique Sérgio Lima Pequeno
 
 ## 📝 Requisitos
-Atualmente, **41,67%** dos requisitos foram implementados.
+Atualmente, **100%** dos requisitos foram implementados.
 <table border="1">
   <thead>
     <tr>
@@ -128,8 +128,8 @@ npm install
 Crie um arquivo `.env` na raiz do projeto e configure as variáveis de ambiente necessárias, como exemplo:
 ```bash
 VITE_API_BASE_URL=http://localhost:8000
-VITE_GOOGLE_CLIENT_ID=test
-VITE_GOOGLE_CLIENT_SECRET=test
+VITE_SUPABASE_ANON_KEY=test
+VITE_SUPABASE_PROJECT_URL=test
 ```
 
 ### 4. **Execute o projeto**
@@ -144,7 +144,195 @@ O projeto estará disponível em:
 
 ## 🗂️ Estrutura do Projeto
 ```bash
-
+.
+├── README.md
+├── eslint.config.js
+├── estrutura.txt
+├── index.html
+├── package-lock.json
+├── package.json
+├── node_modules
+├── env
+├── src
+│   ├── App.tsx
+│   ├── assets
+│   │   ├── logo.ico
+│   │   ├── logo.svg
+│   │   ├── no_image.png
+│   │   ├── professionals-image.png
+│   │   ├── scheduling-image.png
+│   │   ├── services-image.png
+│   │   ├── shape.png
+│   │   └── shape.svg
+│   ├── components
+│   │   ├── buttons
+│   │   │   ├── FlatButton.tsx
+│   │   │   ├── HomeButton.tsx
+│   │   │   ├── IconButton.tsx
+│   │   │   ├── PreviousPageButton.tsx
+│   │   │   └── index.ts
+│   │   ├── cards
+│   │   │   ├── HomeOption.tsx
+│   │   │   ├── ProfessionalCard.tsx
+│   │   │   ├── ServiceCard.tsx
+│   │   │   ├── ServiceScheduled.tsx
+│   │   │   └── index.ts
+│   │   ├── filters
+│   │   │   ├── ProfessionalFilter.tsx
+│   │   │   ├── SearchBar.tsx
+│   │   │   └── index.ts
+│   │   ├── form
+│   │   │   ├── FormProfessional.tsx
+│   │   │   ├── FormService.tsx
+│   │   │   └── index.ts
+│   │   ├── general
+│   │   │   ├── AppointmentModal.tsx
+│   │   │   ├── Footer.tsx
+│   │   │   ├── HeaderNavigation.tsx
+│   │   │   ├── HelpComponent.tsx
+│   │   │   ├── LoginRoute.tsx
+│   │   │   ├── ManagementModal.tsx
+│   │   │   ├── ProfilePhoto.tsx
+│   │   │   ├── ProtectedRoute.tsx
+│   │   │   ├── Spinner.tsx
+│   │   │   ├── TextSeparator.tsx
+│   │   │   ├── ToggleSwitch.tsx
+│   │   │   └── index.ts
+│   │   ├── index.ts
+│   │   ├── inputs
+│   │   │   ├── CustomSelect.tsx
+│   │   │   ├── DateInput.tsx
+│   │   │   ├── FormInput.tsx
+│   │   │   ├── PhotoInput.tsx
+│   │   │   ├── SearchDateInput.tsx
+│   │   │   └── index.ts
+│   │   └── routes
+│   │       ├── SchedulingRoute.tsx
+│   │       └── index.ts
+│   ├── contexts
+│   │   ├── appointment
+│   │   │   ├── AppointmentContext.tsx
+│   │   │   ├── AppointmentProvider.tsx
+│   │   │   └── index.ts
+│   │   ├── auth
+│   │   │   ├── AuthContext.tsx
+│   │   │   ├── AuthProvider.tsx
+│   │   │   └── index.ts
+│   │   ├── index.ts
+│   │   ├── password
+│   │   │   ├── PasswordContext.tsx
+│   │   │   ├── PasswordProvider.tsx
+│   │   │   └── index.ts
+│   │   └── service
+│   │       ├── ServiceContext.tsx
+│   │       ├── ServiceProvider.tsx
+│   │       └── index.ts
+│   ├── hooks
+│   │   ├── index.ts
+│   │   ├── useAppointment.tsx
+│   │   ├── useAuth.tsx
+│   │   ├── useService.tsx
+│   │   └── useShowPassword.tsx
+│   ├── i18n.ts
+│   ├── index.css
+│   ├── locales
+│   │   └── pt-br
+│   │       └── translation.json
+│   ├── main.tsx
+│   ├── pages
+│   │   ├── CreateOrEditAppointment.tsx
+│   │   ├── HomePage.tsx
+│   │   ├── Login.tsx
+│   │   ├── ProfessionalEdit.tsx
+│   │   ├── ProfessionalRegister.tsx
+│   │   ├── ProfessionalsPage.tsx
+│   │   ├── SchedulingList.tsx
+│   │   ├── ServiceEdit.tsx
+│   │   ├── ServiceRegister.tsx
+│   │   ├── ServicesPage.tsx
+│   │   ├── UserRegister.tsx
+│   │   └── index.ts
+│   ├── routes.tsx
+│   ├── services
+│   │   ├── api.ts
+│   │   └── index.ts
+│   ├── types
+│   │   ├── admin-api-data.ts
+│   │   ├── appointment-context-data.ts
+│   │   ├── appointment-customer.ts
+│   │   ├── appointment-form-input.ts
+│   │   ├── appointment-modal-props.ts
+│   │   ├── appointment-professional.ts
+│   │   ├── appointment-service.ts
+│   │   ├── appointment.ts
+│   │   ├── auth-context-data.ts
+│   │   ├── button-props.ts
+│   │   ├── category-types.ts
+│   │   ├── custom-provider-props.ts
+│   │   ├── custom-select-props.ts
+│   │   ├── customer-home-option-props.ts
+│   │   ├── date-input-props.ts
+│   │   ├── footer-props.ts
+│   │   ├── form-service-props.ts
+│   │   ├── header-navigation-props.ts
+│   │   ├── home-option-props.ts
+│   │   ├── index.ts
+│   │   ├── input-props.ts
+│   │   ├── login-form-input-props.ts
+│   │   ├── login-input.ts
+│   │   ├── management-modal-props.ts
+│   │   ├── password-context-data.ts
+│   │   ├── payload-professional.ts
+│   │   ├── photo-input-props.ts
+│   │   ├── professional-card-props.ts
+│   │   ├── professional-filter-props.ts
+│   │   ├── professional.ts
+│   │   ├── profile-photo-props.ts
+│   │   ├── register-form-input-props.ts
+│   │   ├── register-professional-input-props.ts
+│   │   ├── register-service-form-input-props.ts
+│   │   ├── search-bar-props.ts
+│   │   ├── search-by-date-input.ts
+│   │   ├── service-api-data.ts
+│   │   ├── service-card-props.ts
+│   │   ├── service-context-data.ts
+│   │   ├── service-scheduled-props.ts
+│   │   ├── service.ts
+│   │   ├── text-separator-props.ts
+│   │   ├── toggle-switch-props.ts
+│   │   ├── token-props.ts
+│   │   ├── update-appointment.ts
+│   │   ├── upload-response-data.ts
+│   │   ├── user-types.ts
+│   │   └── user.ts
+│   ├── utils
+│   │   ├── constants
+│   │   │   ├── available-hours.ts
+│   │   │   └── index.ts
+│   │   ├── formats
+│   │   │   ├── formatDate.ts
+│   │   │   ├── formatName.ts
+│   │   │   ├── formatPhone.ts
+│   │   │   ├── formatPrice.ts
+│   │   │   ├── getPhotoUrl.ts
+│   │   │   └── index.ts
+│   │   ├── helpers
+│   │   │   ├── handleUploadImageToStorage.ts
+│   │   │   ├── index.ts
+│   │   │   └── isTokenExpired.ts
+│   │   ├── index.ts
+│   │   └── validations
+│   │       ├── appointmentSchema.tsx
+│   │       ├── index.ts
+│   │       ├── loginSchema.tsx
+│   │       ├── registerProfessionalSchema.tsx
+│   │       ├── registerSchema.tsx
+│   │       └── registerServiceSchema.tsx
+│   └── vite-env.d.ts
+├── tsconfig.app.json
+├── tsconfig.json
+├── tsconfig.node.json
+└── vite.config.ts
 ```
 
 ## ▶️ Como executar a aplicação
