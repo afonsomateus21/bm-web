@@ -399,5 +399,8 @@ npm run dev
 Abra o navegador e acesse:  
 **http://localhost:5173**
 
+## 💻 Back End
+[bm-api](https://github.com/afonsomateus21/bm-api)
+
 ## 📝 Licença
 Este projeto está licenciado sob a **MIT License**.
