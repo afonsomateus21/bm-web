@@ -21,6 +21,7 @@ Atualmente, **100%** dos requisitos foram implementados.
       <th>Nome</th>
       <th>Descrição</th>
       <th>Status</th>
+      <th>Implementado em</th>
     </tr>
   </thead>
   <tbody>
@@ -29,72 +30,124 @@ Atualmente, **100%** dos requisitos foram implementados.
       <td>Gerenciar usuário</td>
       <td>Permitir o cadastro, edição, visualização e exclusão de usuários do sistema (ADMIN e CLIENTE).</td>
       <td>Implementado</td>
+      <td>
+        <a href="https://github.com/afonsomateus21/bm-web/blob/main/src/contexts/auth/AuthProvider.tsx">AuthProvider</a>
+        <a href="https://github.com/afonsomateus21/bm-web/blob/main/src/components/form/FormService.tsx">FormProfessional</a>
+        <a href="https://github.com/afonsomateus21/bm-web/blob/main/src/pages/UserRegister.tsx">UserRegister</a>
+        <a href="https://github.com/afonsomateus21/bm-web/blob/main/src/pages/ProfessionalRegister.tsx">ProfessionalRegister</a>
+        <a href="https://github.com/afonsomateus21/bm-web/blob/main/src/pages/ProfessionalEdit.tsx">ProfessionalEdit</a>
+        <a href="https://github.com/afonsomateus21/bm-web/blob/main/src/pages/ProfessionalsPage.tsx">ProfessionalsPage</a>
+      </td>
     </tr>
     <tr>
       <td>RF02</td>
       <td>Cadastrar administradores</td>
       <td>Permitir que usuários do tipo ADMIN criem novos usuários com permissões de administrador (ADMIN).</td>
       <td>Implementado</td>
+      <td>
+        <a href="https://github.com/afonsomateus21/bm-web/blob/main/src/contexts/auth/AuthProvider.tsx">AuthProvider</a>
+        <a href="https://github.com/afonsomateus21/bm-web/blob/main/src/components/form/FormService.tsx">FormProfessional</a>
+        <a href="https://github.com/afonsomateus21/bm-web/blob/main/src/pages/ProfessionalRegister.tsx">ProfessionalRegister</a>
+      </td>
     </tr>
     <tr>
       <td>RF03</td>
       <td>Gerenciar serviços</td>
       <td>Permitir que usuários ADMIN cadastrem, atualizem, visualizem (ADMIN e CLIENTE) e excluam serviços disponíveis.</td>
       <td>Implementado</td>
+      <td>
+        <a href="https://github.com/afonsomateus21/bm-web/blob/main/src/contexts/service/ServiceProvider.tsx">ServiceProvider</a>
+        <a href="https://github.com/afonsomateus21/bm-web/blob/main/src/components/form/ManagementModal.tsx">ManagementModal</a>
+        <a href="https://github.com/afonsomateus21/bm-web/blob/main/src/components/FormService.tsx">FormService</a>
+        <a href="https://github.com/afonsomateus21/bm-web/blob/main/src/pages/ServiceRegister.tsx">ServiceRegister</a>
+        <a href="https://github.com/afonsomateus21/bm-web/blob/main/src/pages/ServiceEdit.tsx">ServiceEdit</a>
+      </td>
     </tr>
     <tr>
       <td>RF04</td>
       <td>Visualizar serviços</td>
       <td>Permitir que usuários CLIENTE e ADMIN visualizem a lista de serviços cadastrados com seus detalhes.</td>
       <td>Implementado</td>
+      <td>
+        <a href="https://github.com/afonsomateus21/bm-web/blob/main/src/contexts/service/ServiceProvider.tsx">ServiceProvider</a>
+        <a href="https://github.com/afonsomateus21/bm-web/blob/main/src/pages/ServiceEdit.tsx">ServicesPage</a>
+      </td>
     </tr>
     <tr>
       <td>RF05</td>
       <td>Realizar agendamento</td>
       <td>Permitir que usuários CLIENTE realizem o agendamento de serviços, especificando data e horário.</td>
       <td>Implementado</td>
+      <td>
+        <a href="https://github.com/afonsomateus21/bm-web/blob/main/src/contexts/appointment/AppointmentProvider.tsx">AppointmentProvideR</a>
+        <a href="https://github.com/afonsomateus21/bm-web/blob/main/src/pages/CreateOrEditAppointment.tsx">CreateOrEditAppointment</a>
+      </td>
     </tr>
     <tr>
       <td>RF06</td>
       <td>Cancelar agendamento</td>
       <td>Permitir que usuários ADMIN e CLIENTE cancelem agendamentos de serviços existentes.</td>
       <td>Implementado</td>
+      <td>
+        <a href="https://github.com/afonsomateus21/bm-web/blob/main/src/contexts/appointment/AppointmentProvider.tsx">AppointmentProvideR</a>
+        <a href="https://github.com/afonsomateus21/bm-web/blob/main/src/components/general/AppointmentModal.tsx">AppointmentModal</a>
+        <a href="https://github.com/afonsomateus21/bm-web/blob/main/src/pages/SchedulingList.tsx">SchedulingList</a>
+      </td>
     </tr>
     <tr>
       <td>RF07</td>
       <td>Notificar agendamento</td>
       <td>Notificar usuários ADMIN e CLIENTE sobre novos agendamentos realizados no sistema.</td>
       <td>Implementado</td>
+      <td>API</td>
     </tr>
     <tr>
       <td>RF08</td>
       <td>Notificar cancelamento</td>
       <td>Notificar usuários ADMIN e CLIENTE sobre cancelamentos de agendamentos no sistema.</td>
       <td>Implementado</td>
+      <td>API</td>
     </tr>
     <tr>
       <td>RF09</td>
       <td>Reservar horários</td>
       <td>Permitir que usuários ADMIN reservem horários específicos para CLIENTES VIP.</td>
       <td>Implementado</td>
+      <td>
+        <a href="https://github.com/afonsomateus21/bm-web/blob/main/src/contexts/appointment/AppointmentProvider.tsx">AppointmentProvide</a>
+        <a href="https://github.com/afonsomateus21/bm-web/blob/main/src/pages/CreateOrEditAppointment.tsx">CreateOrEditAppointment</a>
+      </td>
     </tr>
     <tr>
       <td>RF10</td>
       <td>Cancelar horários</td>
       <td>Permitir que usuários ADMIN cancelem reservas de horários para CLIENTES VIP.</td>
       <td>Implementado</td>
+      <td>
+        <a href="https://github.com/afonsomateus21/bm-web/blob/main/src/contexts/appointment/AppointmentProvider.tsx">AppointmentProvideR</a>
+        <a href="https://github.com/afonsomateus21/bm-web/blob/main/src/components/general/AppointmentModal.tsx">AppointmentModal</a>
+        <a href="https://github.com/afonsomateus21/bm-web/blob/main/src/pages/SchedulingList.tsx">SchedulingList</a>
+      </td>
     </tr>
     <tr>
       <td>RF11</td>
       <td>Realizar login</td>
       <td>Permitir que usuários (ADMIN ou CLIENTE) façam login no sistema com suas credenciais.</td>
       <td>Implementado</td>
+      <td>
+        <a href="https://github.com/afonsomateus21/bm-web/blob/main/src/contexts/appointment/AuthProvider.tsx">AuthProvider</a>
+        <a href="https://github.com/afonsomateus21/bm-web/blob/main/src/pages/Login.tsx">Login</a>
+      </td>
     </tr>
     <tr>
       <td>RF12</td>
       <td>Realizar logout</td>
       <td>Permitir que usuários (ADMIN ou CLIENTE) façam logout do sistema, encerrando a sessão ativa.</td>
       <td>Implementado</td>
+      <td>
+        <a href="https://github.com/afonsomateus21/bm-web/blob/main/src/contexts/appointment/AuthProvider.tsx">AuthProvider</a>
+        <a href="https://github.com/afonsomateus21/bm-web/blob/main/src/pages/HomePage.tsx">HomePage</a>
+      </td>
     </tr>
   </tbody>
 </table>
